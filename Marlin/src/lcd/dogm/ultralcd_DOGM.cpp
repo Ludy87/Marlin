@@ -200,7 +200,8 @@ bool MarlinUI::detected() { return true; }
     };
 
     #if DISABLED(BOOT_MARLIN_LOGO_ANIMATED)
-      draw_bootscreen_bmp(start_bmp);
+      u8g.firstPage();
+      do { draw_bootscreen_bmp(start_bmp); } while (u8g.nextPage());
     #else
       constexpr millis_t d = MARLIN_BOOTSCREEN_FRAME_TIME;
       LOOP_L_N(f, COUNT(marlin_bootscreen_animation)) {
@@ -219,13 +220,9 @@ bool MarlinUI::detected() { return true; }
     #ifndef BOOTSCREEN_TIMEOUT
       #define BOOTSCREEN_TIMEOUT 2500
     #endif
-    for (uint8_t q = 1; q--;) {
-      #if DISABLED(BOOT_MARLIN_LOGO_ANIMATED)
-        u8g.firstPage();
-        do { draw_marlin_bootscreen(q == 0); } while (u8g.nextPage());
-      #else
-        draw_marlin_bootscreen(q == 0);
-      #endif
+    constexpr int one_two_part = ((LCD_PIXEL_HEIGHT) - (START_BMPHEIGHT) -10) < ((MENU_FONT_ASCENT) * 2) ? 2 : 1;
+    for (uint8_t q = one_two_part; q--;) {
+      draw_marlin_bootscreen(q == 0);
       safe_delay((BOOTSCREEN_TIMEOUT) / 2);
     }
   }
