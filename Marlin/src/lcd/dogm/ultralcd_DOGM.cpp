@@ -223,7 +223,7 @@ bool MarlinUI::detected() { return true; }
     constexpr int one_two_part = ((LCD_PIXEL_HEIGHT) - (START_BMPHEIGHT) -10) < ((MENU_FONT_ASCENT) * 2) ? 2 : 1;
     for (uint8_t q = one_two_part; q--;) {
       draw_marlin_bootscreen(q == 0);
-      safe_delay((BOOTSCREEN_TIMEOUT) / 2);
+      safe_delay((BOOTSCREEN_TIMEOUT) / one_two_part);
     }
   }
 
