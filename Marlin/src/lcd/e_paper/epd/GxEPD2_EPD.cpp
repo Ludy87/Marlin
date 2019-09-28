@@ -43,19 +43,16 @@ void GxEPD2_EPD::init(bool initial, bool pulldown_rst_mode)
   _power_is_on = false;
   _using_partial_mode = false;
   _hibernating = false;
-  if (_cs >= 0)
-  {
+  if (_cs >= 0) {
     digitalWrite(_cs, HIGH);
     pinMode(_cs, OUTPUT);
   }
-  if (_dc >= 0)
-  {
+  if (_dc >= 0) {
     digitalWrite(_dc, HIGH);
     pinMode(_dc, OUTPUT);
   }
   _reset();
-  if (_busy >= 0)
-  {
+  if (_busy >= 0) {
     pinMode(_busy, INPUT);
   }
   SPI.begin();
@@ -63,18 +60,15 @@ void GxEPD2_EPD::init(bool initial, bool pulldown_rst_mode)
 
 void GxEPD2_EPD::_reset()
 {
-  if (_rst >= 0)
-  {
-    if (_pulldown_rst_mode)
-    {
+  if (_rst >= 0) {
+    if (_pulldown_rst_mode) {
       digitalWrite(_rst, LOW);
       pinMode(_rst, OUTPUT);
       delay(20);
       pinMode(_rst, INPUT_PULLUP);
       delay(200);
     }
-    else
-    {
+    else {
       digitalWrite(_rst, HIGH);
       pinMode(_rst, OUTPUT);
       delay(20);
@@ -93,8 +87,7 @@ void GxEPD2_EPD::_waitWhileBusy(const char* comment, uint16_t busy_time)
   {
     delay(1); // add some margin to become active
     unsigned long start = micros();
-    while (1)
-    {
+    while (1) {
       if (digitalRead(_busy) != _busy_level) break;
       delay(1);
       if (micros() - start > _busy_timeout) break;
@@ -140,12 +133,10 @@ void GxEPD2_EPD::_writeDataPGM(const uint8_t* data, uint16_t n, uint16_t fill_wi
 {
   SPI.beginTransaction(_spi_settings);
   if (_cs >= 0) digitalWrite(_cs, LOW);
-  for (uint16_t i = 0; i < n; i++)
-  {
+  for (uint16_t i = 0; i < n; i++) {
     SPI.transfer(pgm_read_byte(&*data++));
   }
-  while (fill_with_zeroes > 0)
-  {
+  while (fill_with_zeroes > 0) {
     SPI.transfer(0x00);
     fill_with_zeroes--;
   }
@@ -160,8 +151,7 @@ void GxEPD2_EPD::_writeCommandData(const uint8_t* pCommandData, uint8_t datalen)
   if (_cs >= 0) digitalWrite(_cs, LOW);
   SPI.transfer(*pCommandData++);
   if (_dc >= 0) digitalWrite(_dc, HIGH);
-  for (uint8_t i = 0; i < datalen - 1; i++)  // sub the command
-  {
+  for (uint8_t i = 0; i < datalen - 1; i++) {  // sub the command
     SPI.transfer(*pCommandData++);
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);
@@ -175,8 +165,7 @@ void GxEPD2_EPD::_writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datal
   if (_cs >= 0) digitalWrite(_cs, LOW);
   SPI.transfer(pgm_read_byte(&*pCommandData++));
   if (_dc >= 0) digitalWrite(_dc, HIGH);
-  for (uint8_t i = 0; i < datalen - 1; i++)  // sub the command
-  {
+  for (uint8_t i = 0; i < datalen - 1; i++) {  // sub the command
     SPI.transfer(pgm_read_byte(&*pCommandData++));
   }
   if (_cs >= 0) digitalWrite(_cs, HIGH);

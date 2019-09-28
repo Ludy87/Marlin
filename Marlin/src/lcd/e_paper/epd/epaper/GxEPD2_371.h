@@ -34,7 +34,7 @@ class GxEPD2_371 : public GxEPD2_EPD
     // constructor
     GxEPD2_371(int8_t cs, int8_t dc, int8_t rst, int8_t busy);
     // methods (virtual)
-    //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
+    // Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     void clearScreen(uint8_t value = 0xFF); // init controller memory and screen (default white)
     void writeScreenBuffer(uint8_t value = 0xFF); // init controller memory (default white)
     // write to controller memory, without screen refresh; x and w should be multiple of 8

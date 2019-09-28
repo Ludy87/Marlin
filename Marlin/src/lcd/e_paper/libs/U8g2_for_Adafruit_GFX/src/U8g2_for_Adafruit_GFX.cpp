@@ -313,7 +313,7 @@ static void u8g2_font_decode_len(u8g2_font_t *u8g2, uint8_t len, uint8_t is_fore
     y = u8g2_add_vector_y(y, lx, ly, decode->dir);
     
     /* draw foreground and background (if required) */
-    if ( current > 0 )		/* avoid drawing zero length lines, issue #4 */
+    if ( current > 0 )  /* avoid drawing zero length lines, issue #4 */
     {
       if ( is_foreground )
       {
