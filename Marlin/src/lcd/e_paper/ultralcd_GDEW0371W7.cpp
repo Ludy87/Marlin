@@ -131,11 +131,11 @@ void MarlinUI::init_lcd() {
   epaper.init();
   epaper.clearScreen();
   epaper.setFullWindow();
-  #if ENABLED(LCD_SCREEN_ROT_90)   // rotation
+  #if ENABLED(E_SCREEN_ROT_90)   // rotation
     epaper.setRotation(1);
-  #elif ENABLED(LCD_SCREEN_ROT_180)
-    epaper.setRotation(3);
-  #elif ENABLED(LCD_SCREEN_ROT_270)
+  #elif ENABLED(E_SCREEN_ROT_180)
+    epaper.setRotation(2);
+  #elif ENABLED(E_SCREEN_ROT_270)
     epaper.setRotation(3);
   #endif
   epaper.setTextColor(GxEPD_BLACK);
