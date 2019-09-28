@@ -72,12 +72,10 @@ class GxEPD2_EPD
     virtual void powerOff() = 0; // turns off generation of panel driving voltages, avoids screen fading over time
     virtual void hibernate() = 0; // turns powerOff() and sets controller to deep sleep for minimum power use, ONLY if wakeable by RST (rst >= 0)
     virtual void setPaged() {}; // for GxEPD2_154c paged workaround
-    static inline uint16_t gx_uint16_min(uint16_t a, uint16_t b)
-    {
+    static inline uint16_t gx_uint16_min(uint16_t a, uint16_t b) {
       return (a < b ? a : b);
     };
-    static inline uint16_t gx_uint16_max(uint16_t a, uint16_t b)
-    {
+    static inline uint16_t gx_uint16_max(uint16_t a, uint16_t b) {
       return (a > b ? a : b);
     };
   protected:
