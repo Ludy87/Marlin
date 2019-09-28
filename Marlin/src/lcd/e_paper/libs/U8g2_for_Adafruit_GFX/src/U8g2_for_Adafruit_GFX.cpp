@@ -1,39 +1,37 @@
-/*
-
-  U8g2_for_Adafruit_GFX.cpp
-  
-  Add unicode support and U8g2 fonts to Adafruit GFX libraries.
-  
-  U8g2 for Adafruit GFX Lib (https://github.com/olikraus/U8g2_for_Adafruit_GFX)
-
-  Copyright (c) 2018, olikraus@gmail.com
-  All rights reserved.
-
-  Redistribution and use in source and binary forms, with or without modification, 
-  are permitted provided that the following conditions are met:
-
-  * Redistributions of source code must retain the above copyright notice, this list 
-    of conditions and the following disclaimer.
-    
-  * Redistributions in binary form must reproduce the above copyright notice, this 
-    list of conditions and the following disclaimer in the documentation and/or other 
-    materials provided with the distribution.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
-  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
-  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
-  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
-  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
-  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
-  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
-  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-
-*/
+/**
+ * U8g2_for_Adafruit_GFX.cpp
+ *
+ * Add unicode support and U8g2 fonts to Adafruit GFX libraries.
+ *
+ * U8g2 for Adafruit GFX Lib (https://github.com/olikraus/U8g2_for_Adafruit_GFX)
+ *
+ * Copyright (c) 2018, olikraus@gmail.com
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * * Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or other
+ *   materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+ * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 //#include <Adafruit_GFX.h>
 #include "../../Adafruit_GFX/Adafruit_GFX.h"
@@ -47,7 +45,7 @@
 static uint8_t u8g2_font_get_byte(const uint8_t *font, uint8_t offset)
 {
   font += offset;
-  return u8x8_pgm_read( font );  
+  return u8x8_pgm_read( font );
 }
 
 static uint16_t u8g2_font_get_word(const uint8_t *font, uint8_t offset) U8X8_NOINLINE;
@@ -71,32 +69,32 @@ void u8g2_read_font_info(u8g2_font_info_t *font_info, const uint8_t *font)
   font_info->bbx_mode = u8g2_font_get_byte(font, 1);
   font_info->bits_per_0 = u8g2_font_get_byte(font, 2);
   font_info->bits_per_1 = u8g2_font_get_byte(font, 3);
-  
+
   /* offset 4 */
   font_info->bits_per_char_width = u8g2_font_get_byte(font, 4);
   font_info->bits_per_char_height = u8g2_font_get_byte(font, 5);
   font_info->bits_per_char_x = u8g2_font_get_byte(font, 6);
   font_info->bits_per_char_y = u8g2_font_get_byte(font, 7);
   font_info->bits_per_delta_x = u8g2_font_get_byte(font, 8);
-  
+
   /* offset 9 */
   font_info->max_char_width = u8g2_font_get_byte(font, 9);
   font_info->max_char_height = u8g2_font_get_byte(font, 10);
   font_info->x_offset = u8g2_font_get_byte(font, 11);
   font_info->y_offset = u8g2_font_get_byte(font, 12);
-  
+
   /* offset 13 */
   font_info->ascent_A = u8g2_font_get_byte(font, 13);
   font_info->descent_g = u8g2_font_get_byte(font, 14);
   font_info->ascent_para = u8g2_font_get_byte(font, 15);
   font_info->descent_para = u8g2_font_get_byte(font, 16);
-  
+
   /* offset 17 */
   font_info->start_pos_upper_A = u8g2_font_get_word(font, 17);
-  font_info->start_pos_lower_a = u8g2_font_get_word(font, 19); 
-  
+  font_info->start_pos_lower_a = u8g2_font_get_word(font, 19);
+
   /* offset 21 */
-  font_info->start_pos_unicode = u8g2_font_get_word(font, 21); 
+  font_info->start_pos_unicode = u8g2_font_get_word(font, 21);
 }
 
 uint8_t u8g2_GetFontBBXWidth(u8g2_font_t *u8g2)
@@ -125,15 +123,15 @@ uint8_t u8g2_GetFontCapitalAHeight(u8g2_font_t *u8g2)
 }
 
 static uint8_t u8g2_font_decode_get_unsigned_bits(u8g2_font_decode_t *f, uint8_t cnt) U8X8_NOINLINE;
-static uint8_t u8g2_font_decode_get_unsigned_bits(u8g2_font_decode_t *f, uint8_t cnt) 
+static uint8_t u8g2_font_decode_get_unsigned_bits(u8g2_font_decode_t *f, uint8_t cnt)
 {
   uint8_t val;
   uint8_t bit_pos = f->decode_bit_pos;
   uint8_t bit_pos_plus_cnt;
-  
+
   //val = *(f->decode_ptr);
-  val = u8x8_pgm_read( f->decode_ptr );  
-  
+  val = u8x8_pgm_read( f->decode_ptr );
+
   val >>= bit_pos;
   bit_pos_plus_cnt = bit_pos;
   bit_pos_plus_cnt += cnt;
@@ -149,7 +147,7 @@ static uint8_t u8g2_font_decode_get_unsigned_bits(u8g2_font_decode_t *f, uint8_t
   }
   val &= (1U<<cnt)-1;
   //bit_pos += cnt;
-  
+
   f->decode_bit_pos = bit_pos_plus_cnt;
   return val;
 }
@@ -200,7 +198,7 @@ static int16_t u8g2_add_vector_y(int16_t dy, int16_t x, int16_t y, uint8_t dir)
       break;
     default:
       dy -= x;
-      break;      
+      break;
   }
   return dy;
 }
@@ -221,7 +219,7 @@ static int16_t u8g2_add_vector_x(int16_t dx, int16_t x, int16_t y, uint8_t dir)
       break;
     default:
       dx += y;
-      break;      
+      break;
   }
   return dx;
 }
@@ -244,7 +242,7 @@ void u8g2_draw_hv_line(u8g2_font_t *u8g2, int16_t x, int16_t y, int16_t len, uin
       u8g2->gfx->drawFastVLine(x,y-len+1,len,color);
       break;
   }
-  
+
 }
 
 
@@ -273,34 +271,34 @@ static void u8g2_font_decode_len(u8g2_font_t *u8g2, uint8_t len, uint8_t is_fore
   uint8_t rem;  /* remaining pixel to the right edge of the glyph */
   uint8_t current;  /* number of pixels, which need to be drawn for the draw procedure */
     /* current is either equal to cnt or equal to rem */
-  
+
   /* local coordinates of the glyph */
   uint8_t lx,ly;
-  
+
   /* target position on the screen */
   int16_t x, y;
-  
+
   u8g2_font_decode_t *decode = &(u8g2->font_decode);
-  
+
   cnt = len;
-  
+
   /* get the local position */
   lx = decode->x;
   ly = decode->y;
-  
+
   for(;;)
   {
     /* calculate the number of pixel to the right edge of the glyph */
     rem = decode->glyph_width;
     rem -= lx;
-    
+
     /* calculate how many pixel to draw. This is either to the right edge */
     /* or lesser, if not enough pixel are left */
     current = rem;
     if ( cnt < rem )
       current = cnt;
-    
-    
+
+
     /* now draw the line, but apply the rotation around the glyph target position */
     //u8g2_font_decode_draw_pixel(u8g2, lx,ly,current, is_foreground);
 
@@ -311,7 +309,7 @@ static void u8g2_font_decode_len(u8g2_font_t *u8g2, uint8_t len, uint8_t is_fore
     /* apply rotation */
     x = u8g2_add_vector_x(x, lx, ly, decode->dir);
     y = u8g2_add_vector_y(y, lx, ly, decode->dir);
-    
+
     /* draw foreground and background (if required) */
     if ( current > 0 )  /* avoid drawing zero length lines, issue #4 */
     {
@@ -319,12 +317,12 @@ static void u8g2_font_decode_len(u8g2_font_t *u8g2, uint8_t len, uint8_t is_fore
       {
 	u8g2_draw_hv_line(u8g2, x, y, current, decode->dir, decode->fg_color);
       }
-      else if ( decode->is_transparent == 0 )    
+      else if ( decode->is_transparent == 0 )
       {
 	u8g2_draw_hv_line(u8g2, x, y, current, decode->dir, decode->bg_color);
       }
     }
-    
+
     /* check, whether the end of the run length code has been reached */
     if ( cnt < rem )
       break;
@@ -333,10 +331,10 @@ static void u8g2_font_decode_len(u8g2_font_t *u8g2, uint8_t len, uint8_t is_fore
     ly++;
   }
   lx += cnt;
-  
+
   decode->x = lx;
   decode->y = ly;
-  
+
 }
 
 static void u8g2_font_setup_decode(u8g2_font_t *u8g2, const uint8_t *glyph_data)
@@ -344,16 +342,16 @@ static void u8g2_font_setup_decode(u8g2_font_t *u8g2, const uint8_t *glyph_data)
   u8g2_font_decode_t *decode = &(u8g2->font_decode);
   decode->decode_ptr = glyph_data;
   decode->decode_bit_pos = 0;
-  
+
   /* 8 Nov 2015, this is already done in the glyph data search procedure */
   /*
   decode->decode_ptr += 1;
   decode->decode_ptr += 1;
   */
-  
+
   decode->glyph_width = u8g2_font_decode_get_unsigned_bits(decode, u8g2->font_info.bits_per_char_width);
   decode->glyph_height = u8g2_font_decode_get_unsigned_bits(decode,u8g2->font_info.bits_per_char_height);
-  
+
 }
 
 
@@ -378,26 +376,26 @@ static int8_t u8g2_font_decode_glyph(u8g2_font_t *u8g2, const uint8_t *glyph_dat
   int8_t d;
   int8_t h;
   u8g2_font_decode_t *decode = &(u8g2->font_decode);
-    
+
   u8g2_font_setup_decode(u8g2, glyph_data);
   h = u8g2->font_decode.glyph_height;
-  
+
   x = u8g2_font_decode_get_signed_bits(decode, u8g2->font_info.bits_per_char_x);
   y = u8g2_font_decode_get_signed_bits(decode, u8g2->font_info.bits_per_char_y);
   d = u8g2_font_decode_get_signed_bits(decode, u8g2->font_info.bits_per_delta_x);
 
-  
+
   if ( decode->glyph_width > 0 )
   {
     decode->target_x = u8g2_add_vector_x(decode->target_x, x, -(h+y), decode->dir);
     decode->target_y = u8g2_add_vector_y(decode->target_y, x, -(h+y), decode->dir);
     //u8g2_add_vector(&(decode->target_x), &(decode->target_y), x, -(h+y), decode->dir);
 
-   
+
     /* reset local x/y position */
     decode->x = 0;
     decode->y = 0;
-    
+
     /* decode glyph */
     for(;;)
     {
@@ -412,7 +410,7 @@ static int8_t u8g2_font_decode_glyph(u8g2_font_t *u8g2, const uint8_t *glyph_dat
       if ( decode->y >= h )
         break;
     }
-    
+
   }
   return d;
 }
@@ -430,7 +428,7 @@ const uint8_t *u8g2_font_get_glyph_data(u8g2_font_t *u8g2, uint16_t encoding)
   const uint8_t *font = u8g2->font;
   font += 23;
 
-  
+
   if ( encoding <= 255 )
   {
     if ( encoding >= 'a' )
@@ -441,7 +439,7 @@ const uint8_t *u8g2_font_get_glyph_data(u8g2_font_t *u8g2, uint16_t encoding)
     {
       font += u8g2->font_info.start_pos_upper_A;
     }
-    
+
     for(;;)
     {
       if ( u8x8_pgm_read( font + 1 ) == 0 )
@@ -458,10 +456,10 @@ const uint8_t *u8g2_font_get_glyph_data(u8g2_font_t *u8g2, uint16_t encoding)
     uint16_t e;
     const uint8_t *unicode_lookup_table;
     /* support for the new unicode lookup table */
-    
+
     font += u8g2->font_info.start_pos_unicode;
-    unicode_lookup_table = font; 
-  
+    unicode_lookup_table = font;
+
     /* u8g2 issue 596: search for the glyph start in the unicode lookup table */
     do
     {
@@ -469,9 +467,9 @@ const uint8_t *u8g2_font_get_glyph_data(u8g2_font_t *u8g2, uint16_t encoding)
       e = u8g2_font_get_word(unicode_lookup_table, 2);
       unicode_lookup_table+=4;
     } while( e < encoding );
-    
+
     /* variable "font" is now updated according to the lookup table */
-    
+
     for(;;)
     {
       e = u8x8_pgm_read( font );
@@ -484,8 +482,8 @@ const uint8_t *u8g2_font_get_glyph_data(u8g2_font_t *u8g2, uint16_t encoding)
         return font+3;  /* skip encoding and glyph size */
       }
       font += u8x8_pgm_read( font + 2 );
-    }  
-  }  
+    }
+  }
   return NULL;
 }
 
@@ -521,12 +519,12 @@ int8_t u8g2_GetGlyphWidth(u8g2_font_t *u8g2, uint16_t requested_encoding)
 {
   const uint8_t *glyph_data = u8g2_font_get_glyph_data(u8g2, requested_encoding);
   if ( glyph_data == NULL )
-    return 0; 
-  
+    return 0;
+
   u8g2_font_setup_decode(u8g2, glyph_data);
   u8g2->glyph_x_offset = u8g2_font_decode_get_signed_bits(&(u8g2->font_decode), u8g2->font_info.bits_per_char_x);
   u8g2_font_decode_get_signed_bits(&(u8g2->font_decode), u8g2->font_info.bits_per_char_y);
-  
+
   /* glyph width is here: u8g2->font_decode.glyph_width */
 
   return u8g2_font_decode_get_signed_bits(&(u8g2->font_decode), u8g2->font_info.bits_per_delta_x);
@@ -554,7 +552,7 @@ int16_t u8g2_DrawStr(u8g2_font_t *u8g2, int16_t x, int16_t y, const char *s)
 {
   int16_t sum, delta;
   sum = 0;
-    
+
   while( *s != '\0' )
   {
     delta = u8g2_DrawGlyph(u8g2, x, y, *s);
@@ -573,7 +571,7 @@ int16_t u8g2_DrawStr(u8g2_font_t *u8g2, int16_t x, int16_t y, const char *s)
         y -= delta;
         break;
     }
-    sum += delta;    
+    sum += delta;
     s++;
   }
   return sum;
@@ -586,8 +584,8 @@ void u8g2_SetFont(u8g2_font_t *u8g2, const uint8_t  *font)
   if ( u8g2->font != font )
   {
     u8g2->font = font;
-    u8g2->font_decode.is_transparent = 0; 
-    
+    u8g2->font_decode.is_transparent = 0;
+
     u8g2_read_font_info(&(u8g2->font_info), font);
   }
 }
@@ -607,7 +605,7 @@ void u8g2_SetBackgroundColor(u8g2_font_t *u8g2, uint16_t bg)
 
 /*
   pass a byte from an utf8 encoded string to the utf8 decoder state machine
-  returns 
+  returns
     0x0fffe: no glyph, just continue
     0x0ffff: end of string
     anything else: The decoded encoding
@@ -631,7 +629,7 @@ uint16_t U8G2_FOR_ADAFRUIT_GFX::utf8_next(uint8_t b)
     else if ( b >= 0xf0 )
     {
       utf8_state = 3;
-      b &= 7;      
+      b &= 7;
     }
     else if ( b >= 0xe0 )
     {
@@ -668,7 +666,7 @@ int16_t U8G2_FOR_ADAFRUIT_GFX::drawUTF8(int16_t x, int16_t y, const char *str)
 {
   uint16_t e;
   int16_t delta, sum;
-  
+
   utf8_state = 0;
   sum = 0;
   for(;;)
@@ -680,7 +678,7 @@ int16_t U8G2_FOR_ADAFRUIT_GFX::drawUTF8(int16_t x, int16_t y, const char *str)
     if ( e != 0x0fffe )
     {
       delta = drawGlyph(x, y, e);
-    
+
       switch(u8g2.font_decode.dir)
       {
         case 0:
@@ -697,7 +695,7 @@ int16_t U8G2_FOR_ADAFRUIT_GFX::drawUTF8(int16_t x, int16_t y, const char *str)
           break;
       }
 
-      sum += delta;    
+      sum += delta;
     }
   }
   return sum;
@@ -707,7 +705,7 @@ int16_t U8G2_FOR_ADAFRUIT_GFX::getUTF8Width(const char *str)
 {
   uint16_t e;
   int16_t dx, w;
-  
+
   u8g2.font_decode.glyph_width = 0;
   utf8_state = 0;
   w = 0;
@@ -732,7 +730,7 @@ int16_t U8G2_FOR_ADAFRUIT_GFX::getUTF8Width(const char *str)
     /* issue #46: we have to add the x offset also */
     w += u8g2.glyph_x_offset;	/* this value is set as a side effect of u8g2_GetGlyphWidth() */
   }
-  
+
   return w;
 }
 

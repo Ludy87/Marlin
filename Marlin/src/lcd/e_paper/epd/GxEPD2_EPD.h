@@ -93,7 +93,7 @@ class GxEPD2_EPD
     uint32_t _busy_timeout;
     bool _diag_enabled, _pulldown_rst_mode;
     SPISettings _spi_settings;
-    bool _initial_write, _initial_refresh; 
+    bool _initial_write, _initial_refresh;
     bool _power_is_on, _using_partial_mode, _hibernating;
 };
 

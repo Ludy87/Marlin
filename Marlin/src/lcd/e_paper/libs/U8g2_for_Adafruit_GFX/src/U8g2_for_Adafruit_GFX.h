@@ -8,30 +8,29 @@
  * Copyright (c) 2018, olikraus@gmail.com
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, 
+ * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
  *
- * * Redistributions of source code must retain the above copyright notice, this list 
+ * * Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
  *
- * * Redistributions in binary form must reproduce the above copyright notice, this 
- *   list of conditions and the following disclaimer in the documentation and/or other 
+ * * Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or other
  *   materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
- * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
- * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
- *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+ * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef U8g2_for_Adafruit_GFX_h
@@ -50,30 +49,30 @@ struct _u8g2_font_info_t
   uint8_t bbx_mode;
   uint8_t bits_per_0;
   uint8_t bits_per_1;
-  
+
   /* offset 4 */
   uint8_t bits_per_char_width;
   uint8_t bits_per_char_height;
   uint8_t bits_per_char_x;
   uint8_t bits_per_char_y;
   uint8_t bits_per_delta_x;
-  
+
   /* offset 9 */
   int8_t max_char_width;
   int8_t max_char_height; /* overall height, NOT ascent. Instead ascent = max_char_height + y_offset */
   int16_t x_offset;
   int16_t y_offset;
-  
+
   /* offset 13 */
   int8_t  ascent_A;
   int8_t  descent_g;  /* usually a negative value */
   int8_t  ascent_para;
   int8_t  descent_para;
-    
+
   /* offset 17 */
   uint16_t start_pos_upper_A;
-  uint16_t start_pos_lower_a; 
-  
+  uint16_t start_pos_lower_a;
+
   /* offset 21 */
   uint16_t start_pos_unicode;
 };
@@ -82,15 +81,15 @@ typedef struct _u8g2_font_info_t u8g2_font_info_t;
 struct _u8g2_font_decode_t
 {
   const uint8_t *decode_ptr;      /* pointer to the compressed data */
-  
+
   int16_t target_x;
   int16_t target_y;
   uint16_t fg_color;
   uint16_t bg_color;
-  
+
   int16_t x;           /* local coordinates, (0,0) is upper left */
   int16_t y;
-  int8_t glyph_width; 
+  int8_t glyph_width;
   int8_t glyph_height;
 
   uint8_t decode_bit_pos;     /* bitpos inside a byte of the compressed data */
@@ -103,10 +102,10 @@ typedef struct _u8g2_font_decode_t u8g2_font_decode_t;
 struct _u8g2_font_t
 {
   Adafruit_GFX *gfx;
-  
+
   /* information about the current font */
   const uint8_t *font;             /* current font for all text procedures */
-  
+
   //u8g2_font_calc_vref_fnptr font_calc_vref;
   u8g2_font_decode_t font_decode;   /* new font decode structure */
   u8g2_font_info_t font_info;     /* new font info structure */
@@ -136,14 +135,14 @@ class U8G2_FOR_ADAFRUIT_GFX : public Print {
     u8g2_font_t u8g2;
     int16_t tx, ty;       // current position for the print command
     uint16_t encoding;    // the unicode, detected by the utf-8 decoder
-    uint8_t utf8_state;   // current state of the utf-8 decoder, contains the remaining bytes for a detected unicode glyph 
+    uint8_t utf8_state;   // current state of the utf-8 decoder, contains the remaining bytes for a detected unicode glyph
 
     void home() { tx = 0; ty = 0; utf8_state = 0; }
     void setCursor(int16_t x, int16_t y) { tx = x; ty = y; utf8_state = 0; }
     int16_t getCursorX() { return tx; }
     int16_t getCursorY() { return ty; }
-  
-    U8G2_FOR_ADAFRUIT_GFX() {u8g2.font = NULL; u8g2.font_decode.fg_color = 1; u8g2.font_decode.is_transparent = 1; u8g2.font_decode.dir = 0; home(); } 
+
+    U8G2_FOR_ADAFRUIT_GFX() {u8g2.font = NULL; u8g2.font_decode.fg_color = 1; u8g2.font_decode.is_transparent = 1; u8g2.font_decode.dir = 0; home(); }
     void begin(Adafruit_GFX &gfx) { u8g2.gfx = &gfx; }
     void setFont(const uint8_t *font)          // set u8g2 font
       { u8g2_SetFont(&u8g2, font); }
@@ -172,7 +171,7 @@ class U8G2_FOR_ADAFRUIT_GFX : public Print {
     size_t write(uint8_t v) {
       uint16_t e = utf8_next(v);
       int16_t delta;
-      
+
       if ( e == '\n' ) {
         tx = 0;
         ty += u8g2.font_info.ascent_para - u8g2.font_info.descent_para;
@@ -202,7 +201,7 @@ class U8G2_FOR_ADAFRUIT_GFX : public Print {
     size_t write(const uint8_t *buffer, size_t size) {
       size_t cnt = 0;
       while( size > 0 ) {
-          cnt += write(*buffer++); 
+          cnt += write(*buffer++);
           size--;
       }
       return cnt;

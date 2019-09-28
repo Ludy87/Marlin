@@ -43,7 +43,7 @@ class GxEPD2_GFX : public Adafruit_GFX
     // setPartialWindow, use parameters according to actual rotation.
     // x and w should be multiple of 8, for rotation 0 or 2,
     // y and h should be multiple of 8, for rotation 1 or 3,
-    // else window is increased as needed, 
+    // else window is increased as needed,
     // this is an addressing limitation of the e-paper controllers
     virtual void setPartialWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h) = 0;
     virtual void firstPage() = 0;
