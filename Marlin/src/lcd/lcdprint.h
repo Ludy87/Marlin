@@ -12,9 +12,12 @@
 
 #include "../inc/MarlinConfigPre.h"
 
-#if HAS_GRAPHICAL_LCD
+#if HAS_GRAPHICAL_LCD && DISABLED(EPAPER)
   #include "dogm/u8g_fontutf8.h"
   typedef u8g_uint_t lcd_uint_t;
+#elif ENABLED(EPAPER)
+  #define _UxGT(a) a
+  typedef uint16_t lcd_uint_t;
 #else
   #define _UxGT(a) a
   typedef uint8_t lcd_uint_t;
@@ -70,3 +73,5 @@ inline int lcd_put_u8str(const lcd_uint_t col, const lcd_uint_t row, PGM_P str) 
 
 inline int lcd_put_wchar(const wchar_t c) { return lcd_put_wchar_max(c, PIXEL_LEN_NOLIMIT); }
 inline int lcd_put_wchar(const lcd_uint_t col, const lcd_uint_t row, const wchar_t c) { lcd_moveto(col, row); return lcd_put_wchar(c); }
+
+void lcd_put_axis(lcd_uint_t col, lcd_uint_t row, const AxisEnum axis);

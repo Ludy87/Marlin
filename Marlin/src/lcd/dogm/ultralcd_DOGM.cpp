@@ -37,7 +37,7 @@
 
 #include "../../inc/MarlinConfigPre.h"
 
-#if HAS_GRAPHICAL_LCD
+#if HAS_GRAPHICAL_LCD && DISABLED(E_PAPER)
 
 #include "ultralcd_DOGM.h"
 #include "u8g_fontutf8.h"

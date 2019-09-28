@@ -58,6 +58,8 @@
 
   #if ENABLED(TOUCH_BUTTONS)
     #define LCD_UPDATE_INTERVAL 50
+  #elif ENABLED(E_PAPER)
+    #define LCD_UPDATE_INTERVAL 400 //TODO
   #else
     #define LCD_UPDATE_INTERVAL 100
   #endif

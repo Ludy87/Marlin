@@ -329,6 +329,10 @@
   #endif
 #endif
 
+#if ENABLED(EPAPER)
+  #define E_PAPER
+#endif
+
 #if ENABLED(IS_ULTRA_LCD)
   #define ULTRA_LCD
 #endif
@@ -352,9 +356,9 @@
 #endif
 
 // Aliases for LCD features
-#define HAS_SPI_LCD          ENABLED(ULTRA_LCD)
+#define HAS_SPI_LCD         (ENABLED(ULTRA_LCD) || ENABLED(E_PAPER))
 #define HAS_DISPLAY         (HAS_SPI_LCD || ENABLED(EXTENSIBLE_UI))
-#define HAS_GRAPHICAL_LCD    ENABLED(DOGLCD)
+#define HAS_GRAPHICAL_LCD   (ENABLED(DOGLCD) || ENABLED(E_PAPER))
 #define HAS_CHARACTER_LCD   (HAS_SPI_LCD && !HAS_GRAPHICAL_LCD)
 #define HAS_LCD_MENU        (ENABLED(ULTIPANEL) && DISABLED(NO_LCD_MENUS))
 #define HAS_ADC_BUTTONS      ENABLED(ADC_KEYPAD)

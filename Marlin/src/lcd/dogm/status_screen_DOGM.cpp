@@ -27,7 +27,7 @@
 
 #include "../../inc/MarlinConfigPre.h"
 
-#if HAS_GRAPHICAL_LCD && DISABLED(LIGHTWEIGHT_UI)
+#if HAS_GRAPHICAL_LCD && DISABLED(LIGHTWEIGHT_UI) && DISABLED(E_PAPER)
 
 #include "dogm_Statusscreen.h"
 #include "ultralcd_DOGM.h"

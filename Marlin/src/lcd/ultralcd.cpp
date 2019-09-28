@@ -82,8 +82,10 @@
 
 #if HAS_SPI_LCD
 
-#if HAS_GRAPHICAL_LCD
+#if HAS_GRAPHICAL_LCD && DISABLED(E_PAPER)
   #include "dogm/ultralcd_DOGM.h"
+#elif HAS_GRAPHICAL_LCD && ENABLED(E_PAPER)
+  #include "e_paper/ultralcd_GDEW0371W7.h"
 #endif
 
 #include "lcdprint.h"
@@ -1016,18 +1018,28 @@ void MarlinUI::update() {
 
         if (do_u8g_loop) {
           if (!drawing_screen) {                // If not already drawing pages
-            u8g.firstPage();                    // Start the first page
+            #if ENABLED(E_PAPER)
+              epaper.firstPage();                    // Start the first page
+            #else
+              u8g.firstPage();                    // Start the first page
+            #endif
             drawing_screen = first_page = true; // Flag as drawing pages
           }
-          set_font(FONT_MENU);                  // Setup font for every page draw
-          u8g.setColorIndex(1);                 // And reset the color
+          #if DISABLED(E_PAPER)
+            set_font(FONT_MENU);                  // Setup font for every page draw
+            u8g.setColorIndex(1);                 // And reset the color
+          #endif
           run_current_screen();                 // Draw and process the current screen
           first_page = false;
 
           // The screen handler can clear drawing_screen for an action that changes the screen.
           // If still drawing and there's another page, update max-time and return now.
           // The nextPage will already be set up on the next call.
-          if (drawing_screen && (drawing_screen = u8g.nextPage())) {
+          #if DISABLED(E_PAPER)
+            if (drawing_screen && (drawing_screen = u8g.nextPage())) {
+          #else
+            if (drawing_screen && (drawing_screen = epaper.nextPage())) {
+          #endif
             NOLESS(max_display_update_time, millis() - ms);
             return;
           }
