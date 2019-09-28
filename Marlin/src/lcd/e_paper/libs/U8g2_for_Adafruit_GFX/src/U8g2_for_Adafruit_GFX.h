@@ -58,16 +58,16 @@ struct _u8g2_font_info_t
   uint8_t bits_per_delta_x;
 
   /* offset 9 */
-  int8_t max_char_width;
-  int8_t max_char_height; /* overall height, NOT ascent. Instead ascent = max_char_height + y_offset */
-  int16_t x_offset;
-  int16_t y_offset;
+  uint8_t max_char_width;
+  uint8_t max_char_height; /* overall height, NOT ascent. Instead ascent = max_char_height + y_offset */
+  uint16_t x_offset;
+  uint16_t y_offset;
 
   /* offset 13 */
-  int8_t  ascent_A;
-  int8_t  descent_g;  /* usually a negative value */
-  int8_t  ascent_para;
-  int8_t  descent_para;
+  uint8_t  ascent_A;
+  uint8_t  descent_g;  /* usually a negative value */
+  uint8_t  ascent_para;
+  uint8_t  descent_para;
 
   /* offset 17 */
   uint16_t start_pos_upper_A;
@@ -82,15 +82,15 @@ struct _u8g2_font_decode_t
 {
   const uint8_t *decode_ptr;      /* pointer to the compressed data */
 
-  int16_t target_x;
-  int16_t target_y;
+  uint16_t target_x;
+  uint16_t target_y;
   uint16_t fg_color;
   uint16_t bg_color;
 
-  int16_t x;           /* local coordinates, (0,0) is upper left */
-  int16_t y;
-  int8_t glyph_width;
-  int8_t glyph_height;
+  uint16_t x;           /* local coordinates, (0,0) is upper left */
+  uint16_t y;
+  uint8_t glyph_width;
+  uint8_t glyph_height;
 
   uint8_t decode_bit_pos;     /* bitpos inside a byte of the compressed data */
   uint8_t is_transparent;
@@ -114,17 +114,17 @@ struct _u8g2_font_t
   //int8_t font_ref_ascent;
   //int8_t font_ref_descent;
 
-  int8_t glyph_x_offset;    /* set by u8g2_GetGlyphWidth as a side effect */
+  uint8_t glyph_x_offset;    /* set by u8g2_GetGlyphWidth as a side effect */
 };
 typedef struct _u8g2_font_t u8g2_font_t;
 
 
 uint8_t u8g2_IsGlyph(u8g2_font_t *u8g2, uint16_t requested_encoding);
-int8_t u8g2_GetGlyphWidth(u8g2_font_t *u8g2, uint16_t requested_encoding);
+uint8_t u8g2_GetGlyphWidth(u8g2_font_t *u8g2, uint16_t requested_encoding);
 void u8g2_SetFontMode(u8g2_font_t *u8g2, uint8_t is_transparent);
 void u8g2_SetFontDirection(u8g2_font_t *u8g2, uint8_t dir);
-int16_t u8g2_DrawGlyph(u8g2_font_t *u8g2, int16_t x, int16_t y, uint16_t encoding);
-int16_t u8g2_DrawStr(u8g2_font_t *u8g2, int16_t x, int16_t y, const char *s);
+uint16_t u8g2_DrawGlyph(u8g2_font_t *u8g2, uint16_t x, uint16_t y, uint16_t encoding);
+uint16_t u8g2_DrawStr(u8g2_font_t *u8g2, uint16_t x, uint16_t y, const char *s);
 void u8g2_SetFont(u8g2_font_t *u8g2, const uint8_t  *font);
 void u8g2_SetForegroundColor(u8g2_font_t *u8g2, uint16_t fg);
 void u8g2_SetBackgroundColor(u8g2_font_t *u8g2, uint16_t bg);
@@ -133,14 +133,14 @@ void u8g2_SetBackgroundColor(u8g2_font_t *u8g2, uint16_t bg);
 class U8G2_FOR_ADAFRUIT_GFX : public Print {
   public:
     u8g2_font_t u8g2;
-    int16_t tx, ty;       // current position for the print command
+    uint16_t tx, ty;       // current position for the print command
     uint16_t encoding;    // the unicode, detected by the utf-8 decoder
     uint8_t utf8_state;   // current state of the utf-8 decoder, contains the remaining bytes for a detected unicode glyph
 
     void home() { tx = 0; ty = 0; utf8_state = 0; }
-    void setCursor(int16_t x, int16_t y) { tx = x; ty = y; utf8_state = 0; }
-    int16_t getCursorX() { return tx; }
-    int16_t getCursorY() { return ty; }
+    void setCursor(uint16_t x, uint16_t y) { tx = x; ty = y; utf8_state = 0; }
+    uint16_t getCursorX() { return tx; }
+    uint16_t getCursorY() { return ty; }
 
     U8G2_FOR_ADAFRUIT_GFX() {u8g2.font = NULL; u8g2.font_decode.fg_color = 1; u8g2.font_decode.is_transparent = 1; u8g2.font_decode.dir = 0; home(); }
     void begin(Adafruit_GFX &gfx) { u8g2.gfx = &gfx; }
@@ -154,23 +154,23 @@ class U8G2_FOR_ADAFRUIT_GFX : public Print {
       { u8g2_SetForegroundColor(&u8g2, fg); }
     void setBackgroundColor(uint16_t bg)       // only used for setFontMode(0)
       { u8g2_SetBackgroundColor(&u8g2, bg); }
-    int8_t getFontAscent()
+    uint8_t getFontAscent()
       { return u8g2.font_info.ascent_A; }
-    int8_t getFontDescent()
+    uint8_t getFontDescent()
       { return u8g2.font_info.descent_g; }
-    int16_t drawGlyph(int16_t x, int16_t y, uint16_t e)
+    uint16_t drawGlyph(uint16_t x, uint16_t y, uint16_t e)
       { return u8g2_DrawGlyph(&u8g2, x, y, e); }  // draw a signle char (e == Unicode)
-    int16_t drawStr(int16_t x, int16_t y, const char *s)
+    uint16_t drawStr(uint16_t x, uint16_t y, const char *s)
       { return u8g2_DrawStr(&u8g2, x, y, s); }
 
-    int16_t drawUTF8(int16_t x, int16_t y, const char *str);
-    int16_t getUTF8Width(const char *str);
+    uint16_t drawUTF8(uint16_t x, uint16_t y, const char *str);
+    uint16_t getUTF8Width(const char *str);
 
     uint16_t utf8_next(uint8_t b);
 
     size_t write(uint8_t v) {
       uint16_t e = utf8_next(v);
-      int16_t delta;
+      uint16_t delta;
 
       if ( e == '\n' ) {
         tx = 0;

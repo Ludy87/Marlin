@@ -18,7 +18,7 @@
 class GxEPD2_GFX : public Adafruit_GFX
 {
   public:
-    GxEPD2_GFX(GxEPD2_EPD& _epd2, int16_t w, int16_t h) : Adafruit_GFX(w, h), epd2(_epd2) {};
+    GxEPD2_GFX(GxEPD2_EPD& _epd2, uint16_t w, uint16_t h) : Adafruit_GFX(w, h), epd2(_epd2) {};
     virtual uint16_t pages() = 0;
     virtual uint16_t pageHeight() = 0;
     virtual bool mirror(bool m) = 0;
@@ -49,32 +49,32 @@ class GxEPD2_GFX : public Adafruit_GFX
     virtual void firstPage() = 0;
     virtual bool nextPage() = 0;
     virtual void drawPaged(void (*drawCallback)(const void*), const void* pv) = 0;
-    virtual void drawInvertedBitmap(int16_t x, int16_t y, const uint8_t bitmap[], int16_t w, int16_t h, uint16_t color) = 0;
+    virtual void drawInvertedBitmap(uint16_t x, uint16_t y, const uint8_t bitmap[], uint16_t w, uint16_t h, uint16_t color) = 0;
     //  Support for Bitmaps (Sprites) to Controller Buffer and to Screen
     virtual void clearScreen(uint8_t value = 0xFF) = 0; // init controller memory and screen (default white)
     virtual void writeScreenBuffer(uint8_t value = 0xFF) = 0; // init controller memory (default white)
     // write to controller memory, without screen refresh; x and w should be multiple of 8
-    virtual void writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
-    virtual void writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
-    virtual void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) = 0;
-    virtual void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h) = 0; // default options false
-    virtual void writeImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) = 0;
-    virtual void writeImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h) = 0; // default options false
+    virtual void writeImage(const uint8_t bitmap[], uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
+    virtual void writeImagePart(const uint8_t bitmap[], uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
+                                uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
+    virtual void writeImage(const uint8_t* black, const uint8_t* color, uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert, bool mirror_y, bool pgm) = 0;
+    virtual void writeImage(const uint8_t* black, const uint8_t* color, uint16_t x, uint16_t y, uint16_t w, uint16_t h) = 0; // default options false
+    virtual void writeImagePart(const uint8_t* black, const uint8_t* color, uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
+                                uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert, bool mirror_y, bool pgm) = 0;
+    virtual void writeImagePart(const uint8_t* black, const uint8_t* color, uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
+                                uint16_t x, uint16_t y, uint16_t w, uint16_t h) = 0; // default options false
     // write to controller memory, with screen refresh; x and w should be multiple of 8
-    virtual void drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
-    virtual void drawImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
-    virtual void drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) = 0;
-    virtual void drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h) = 0; // default options false
-    virtual void drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) = 0;
-    virtual void drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
-                                int16_t x, int16_t y, int16_t w, int16_t h) = 0; // default options false
+    virtual void drawImage(const uint8_t bitmap[], uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
+    virtual void drawImagePart(const uint8_t bitmap[], uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
+                                uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) = 0;
+    virtual void drawImage(const uint8_t* black, const uint8_t* color, uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert, bool mirror_y, bool pgm) = 0;
+    virtual void drawImage(const uint8_t* black, const uint8_t* color, uint16_t x, uint16_t y, uint16_t w, uint16_t h) = 0; // default options false
+    virtual void drawImagePart(const uint8_t* black, const uint8_t* color, uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
+                                uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert, bool mirror_y, bool pgm) = 0;
+    virtual void drawImagePart(const uint8_t* black, const uint8_t* color, uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
+                                uint16_t x, uint16_t y, uint16_t w, uint16_t h) = 0; // default options false
     virtual void refresh(bool partial_update_mode = false) = 0; // screen refresh from controller memory to full screen
-    virtual void refresh(int16_t x, int16_t y, int16_t w, int16_t h) = 0; // screen refresh from controller memory, partial screen
+    virtual void refresh(uint16_t x, uint16_t y, uint16_t w, uint16_t h) = 0; // screen refresh from controller memory, partial screen
     virtual void powerOff() = 0; // turns off generation of panel driving voltages, avoids screen fading over time
     virtual void hibernate() = 0; // turns powerOff() and sets controller to deep sleep for minimum power use, ONLY if wakeable by RST (rst >= 0)
   public:

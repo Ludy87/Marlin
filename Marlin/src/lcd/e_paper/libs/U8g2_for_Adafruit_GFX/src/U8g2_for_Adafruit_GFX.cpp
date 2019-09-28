@@ -102,11 +102,11 @@ uint8_t u8g2_GetFontBBXHeight(u8g2_font_t *u8g2) {
   return u8g2->font_info.max_char_height;   /* new font info structure */
 }
 
-int8_t u8g2_GetFontBBXOffX(u8g2_font_t *u8g2) {
+uint8_t u8g2_GetFontBBXOffX(u8g2_font_t *u8g2) {
   return u8g2->font_info.x_offset;    /* new font info structure */
 }
 
-int8_t u8g2_GetFontBBXOffY(u8g2_font_t *u8g2) {
+uint8_t u8g2_GetFontBBXOffY(u8g2_font_t *u8g2) {
   return u8g2->font_info.y_offset;    /* new font info structure */
 }
 
@@ -159,10 +159,10 @@ static uint8_t u8g2_font_decode_get_unsigned_bits(u8g2_font_decode_t *f, uint8_t
 
 */
 /* optimized */
-static int8_t u8g2_font_decode_get_signed_bits(u8g2_font_decode_t *f, uint8_t cnt) U8X8_NOINLINE;
-static int8_t u8g2_font_decode_get_signed_bits(u8g2_font_decode_t *f, uint8_t cnt) {
-  int8_t v, d;
-  v = (int8_t)u8g2_font_decode_get_unsigned_bits(f, cnt);
+static uint8_t u8g2_font_decode_get_signed_bits(u8g2_font_decode_t *f, uint8_t cnt) U8X8_NOINLINE;
+static uint8_t u8g2_font_decode_get_signed_bits(u8g2_font_decode_t *f, uint8_t cnt) {
+  uint8_t v, d;
+  v = (uint8_t)u8g2_font_decode_get_unsigned_bits(f, cnt);
   d = 1;
   cnt--;
   d <<= cnt;
@@ -172,8 +172,8 @@ static int8_t u8g2_font_decode_get_signed_bits(u8g2_font_decode_t *f, uint8_t cn
 }
 
 
-static int16_t u8g2_add_vector_y(int16_t dy, int16_t x, int16_t y, uint8_t dir) U8X8_NOINLINE;
-static int16_t u8g2_add_vector_y(int16_t dy, int16_t x, int16_t y, uint8_t dir) {
+static uint16_t u8g2_add_vector_y(uint16_t dy, uint16_t x, uint16_t y, uint8_t dir) U8X8_NOINLINE;
+static uint16_t u8g2_add_vector_y(uint16_t dy, uint16_t x, uint16_t y, uint8_t dir) {
   switch(dir)
   {
     case 0:
@@ -192,8 +192,8 @@ static int16_t u8g2_add_vector_y(int16_t dy, int16_t x, int16_t y, uint8_t dir) 
   return dy;
 }
 
-static int16_t u8g2_add_vector_x(int16_t dx, int16_t x, int16_t y, uint8_t dir) U8X8_NOINLINE;
-static int16_t u8g2_add_vector_x(int16_t dx, int16_t x, int16_t y, uint8_t dir) {
+static uint16_t u8g2_add_vector_x(uint16_t dx, uint16_t x, uint16_t y, uint8_t dir) U8X8_NOINLINE;
+static uint16_t u8g2_add_vector_x(uint16_t dx, uint16_t x, uint16_t y, uint8_t dir) {
   switch(dir)
   {
     case 0:
@@ -212,8 +212,8 @@ static int16_t u8g2_add_vector_x(int16_t dx, int16_t x, int16_t y, uint8_t dir) 
   return dx;
 }
 
-void u8g2_draw_hv_line(u8g2_font_t *u8g2, int16_t x, int16_t y, int16_t len, uint8_t dir, uint16_t color) U8X8_NOINLINE;
-void u8g2_draw_hv_line(u8g2_font_t *u8g2, int16_t x, int16_t y, int16_t len, uint8_t dir, uint16_t color) {
+void u8g2_draw_hv_line(u8g2_font_t *u8g2, uint16_t x, uint16_t y, uint16_t len, uint8_t dir, uint16_t color) U8X8_NOINLINE;
+void u8g2_draw_hv_line(u8g2_font_t *u8g2, uint16_t x, uint16_t y, uint16_t len, uint8_t dir, uint16_t color) {
   switch(dir)
   {
     case 0:
@@ -262,7 +262,7 @@ static void u8g2_font_decode_len(u8g2_font_t *u8g2, uint8_t len, uint8_t is_fore
   uint8_t lx,ly;
 
   /* target position on the screen */
-  int16_t x, y;
+  uint16_t x, y;
 
   u8g2_font_decode_t *decode = &(u8g2->font_decode);
 
@@ -354,11 +354,11 @@ static void u8g2_font_setup_decode(u8g2_font_t *u8g2, const uint8_t *glyph_data)
     u8g2_font_decode_len()
 */
 /* optimized */
-static int8_t u8g2_font_decode_glyph(u8g2_font_t *u8g2, const uint8_t *glyph_data) {
+static uint8_t u8g2_font_decode_glyph(u8g2_font_t *u8g2, const uint8_t *glyph_data) {
   uint8_t a, b;
-  int16_t x, y;
-  int8_t d;
-  int8_t h;
+  uint16_t x, y;
+  uint8_t d;
+  uint8_t h;
   u8g2_font_decode_t *decode = &(u8g2->font_decode);
 
   u8g2_font_setup_decode(u8g2, glyph_data);
@@ -470,8 +470,8 @@ const uint8_t *u8g2_font_get_glyph_data(u8g2_font_t *u8g2, uint16_t encoding) {
   return NULL;
 }
 
-static int16_t u8g2_font_draw_glyph(u8g2_font_t *u8g2, int16_t x, int16_t y, uint16_t encoding) {
-  int16_t dx = 0;
+static uint16_t u8g2_font_draw_glyph(u8g2_font_t *u8g2, uint16_t x, uint16_t y, uint16_t encoding) {
+  uint16_t dx = 0;
   u8g2->font_decode.target_x = x;
   u8g2->font_decode.target_y = y;
   //u8g2->font_decode.is_transparent = is_transparent; this is already set
@@ -496,7 +496,7 @@ uint8_t u8g2_IsGlyph(u8g2_font_t *u8g2, uint16_t requested_encoding) {
 
 /* side effect: updates u8g2->font_decode and u8g2->glyph_x_offset */
 /* actually u8g2_GetGlyphWidth returns the glyph delta x and glyph width itself is set as side effect */
-int8_t u8g2_GetGlyphWidth(u8g2_font_t *u8g2, uint16_t requested_encoding) {
+uint8_t u8g2_GetGlyphWidth(u8g2_font_t *u8g2, uint16_t requested_encoding) {
   const uint8_t *glyph_data = u8g2_font_get_glyph_data(u8g2, requested_encoding);
   if ( glyph_data == NULL )
     return 0;
@@ -521,12 +521,12 @@ void u8g2_SetFontDirection(u8g2_font_t *u8g2, uint8_t dir) {
 
 
 
-int16_t u8g2_DrawGlyph(u8g2_font_t *u8g2, int16_t x, int16_t y, uint16_t encoding) {
+uint16_t u8g2_DrawGlyph(u8g2_font_t *u8g2, uint16_t x, uint16_t y, uint16_t encoding) {
   return u8g2_font_draw_glyph(u8g2, x, y, encoding);
 }
 
-int16_t u8g2_DrawStr(u8g2_font_t *u8g2, int16_t x, int16_t y, const char *s) {
-  int16_t sum, delta;
+uint16_t u8g2_DrawStr(u8g2_font_t *u8g2, uint16_t x, uint16_t y, const char *s) {
+  uint16_t sum, delta;
   sum = 0;
 
   while( *s != '\0' )
@@ -634,9 +634,9 @@ uint16_t U8G2_FOR_ADAFRUIT_GFX::utf8_next(uint8_t b) {
   return encoding;
 }
 
-int16_t U8G2_FOR_ADAFRUIT_GFX::drawUTF8(int16_t x, int16_t y, const char *str) {
+uint16_t U8G2_FOR_ADAFRUIT_GFX::drawUTF8(uint16_t x, uint16_t y, const char *str) {
   uint16_t e;
-  int16_t delta, sum;
+  uint16_t delta, sum;
 
   utf8_state = 0;
   sum = 0;
@@ -672,9 +672,9 @@ int16_t U8G2_FOR_ADAFRUIT_GFX::drawUTF8(int16_t x, int16_t y, const char *str) {
   return sum;
 }
 
-int16_t U8G2_FOR_ADAFRUIT_GFX::getUTF8Width(const char *str) {
+uint16_t U8G2_FOR_ADAFRUIT_GFX::getUTF8Width(const char *str) {
   uint16_t e;
-  int16_t dx, w;
+  uint16_t dx, w;
 
   u8g2.font_decode.glyph_width = 0;
   utf8_state = 0;
