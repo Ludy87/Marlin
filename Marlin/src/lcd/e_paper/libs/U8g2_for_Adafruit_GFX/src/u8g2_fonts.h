@@ -41,31 +41,31 @@
 #include <stdint.h>
 
 #ifdef __GNUC__
-#  define U8X8_NOINLINE __attribute__((noinline))
-#  define U8X8_SECTION(name) __attribute__ ((section (name)))
-#  define U8X8_UNUSED __attribute__((unused))
+  #define U8X8_NOINLINE __attribute__((noinline))
+  #define U8X8_SECTION(name) __attribute__ ((section (name)))
+  #define U8X8_UNUSED __attribute__((unused))
 #else
-#  define U8X8_SECTION(name)
-#  define U8X8_NOINLINE
-#  define U8X8_UNUSED
+  #define U8X8_SECTION(name)
+  #define U8X8_NOINLINE
+  #define U8X8_UNUSED
 #endif
 
 #if defined(__GNUC__) && defined(__AVR__)
-#  define U8X8_FONT_SECTION(name) U8X8_SECTION(".progmem." name)
-#  define u8x8_pgm_read(adr) pgm_read_byte_near(adr)
-#  define U8X8_PROGMEM PROGMEM
+  #define U8X8_FONT_SECTION(name) U8X8_SECTION(".progmem." name)
+  #define u8x8_pgm_read(adr) pgm_read_byte_near(adr)
+  #define U8X8_PROGMEM PROGMEM
 #endif
 
 #ifndef U8X8_FONT_SECTION
-#  define U8X8_FONT_SECTION(name)
+  #define U8X8_FONT_SECTION(name)
 #endif
 
 #ifndef u8x8_pgm_read
-#  define u8x8_pgm_read(adr) (*(const uint8_t *)(adr))
+  #define u8x8_pgm_read(adr) (*(const uint8_t *)(adr))
 #endif
 
 #ifndef U8X8_PROGMEM
-#  define U8X8_PROGMEM
+  #define U8X8_PROGMEM
 #endif
 
 #define U8G2_FONT_SECTION(name) U8X8_FONT_SECTION(name)
@@ -73,9 +73,9 @@
 /* the macro U8G2_USE_LARGE_FONTS enables large fonts (>32K) */
 /* it can be enabled for those uC supporting larger arrays */
 #if defined(unix) || defined(__arm__) || defined(__arc__) || defined(ESP8266) || defined(ESP_PLATFORM)
-#ifndef U8G2_USE_LARGE_FONTS
-#define U8G2_USE_LARGE_FONTS
-#endif
+  #ifndef U8G2_USE_LARGE_FONTS
+    #define U8G2_USE_LARGE_FONTS
+  #endif
 #endif
 
 
