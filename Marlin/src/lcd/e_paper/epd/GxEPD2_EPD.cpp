@@ -21,8 +21,7 @@ GxEPD2_EPD::GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t bus
                        uint16_t w, uint16_t h, GxEPD2::Panel p, bool c, bool pu, bool fpu) :
   WIDTH(w), HEIGHT(h), panel(p), hasColor(c), hasPartialUpdate(pu), hasFastPartialUpdate(fpu),
   _cs(cs), _dc(dc), _rst(rst), _busy(busy), _busy_level(busy_level), _busy_timeout(busy_timeout), _diag_enabled(false),
-  _spi_settings(4000000, MSBFIRST, SPI_MODE0)
-{
+  _spi_settings(4000000, MSBFIRST, SPI_MODE0) {
   _initial_write = true;
   _initial_refresh = true;
   _power_is_on = false;
@@ -30,13 +29,11 @@ GxEPD2_EPD::GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t bus
   _hibernating = false;
 }
 
-void GxEPD2_EPD::init()
-{
+void GxEPD2_EPD::init() {
   init(true, false);
 }
 
-void GxEPD2_EPD::init(bool initial, bool pulldown_rst_mode)
-{
+void GxEPD2_EPD::init(bool initial, bool pulldown_rst_mode) {
   _initial_write = initial;
   _initial_refresh = initial;
   _pulldown_rst_mode = pulldown_rst_mode;
@@ -58,8 +55,7 @@ void GxEPD2_EPD::init(bool initial, bool pulldown_rst_mode)
   SPI.begin();
 }
 
-void GxEPD2_EPD::_reset()
-{
+void GxEPD2_EPD::_reset() {
   if (_rst >= 0) {
     if (_pulldown_rst_mode) {
       digitalWrite(_rst, LOW);
@@ -81,8 +77,7 @@ void GxEPD2_EPD::_reset()
   }
 }
 
-void GxEPD2_EPD::_waitWhileBusy(const char* comment, uint16_t busy_time)
-{
+void GxEPD2_EPD::_waitWhileBusy(const char* comment, uint16_t busy_time) {
   if (_busy >= 0)
   {
     delay(1); // add some margin to become active
@@ -97,8 +92,7 @@ void GxEPD2_EPD::_waitWhileBusy(const char* comment, uint16_t busy_time)
   else delay(busy_time);
 }
 
-void GxEPD2_EPD::_writeCommand(uint8_t c)
-{
+void GxEPD2_EPD::_writeCommand(uint8_t c) {
   SPI.beginTransaction(_spi_settings);
   if (_dc >= 0) digitalWrite(_dc, LOW);
   if (_cs >= 0) digitalWrite(_cs, LOW);
@@ -108,8 +102,7 @@ void GxEPD2_EPD::_writeCommand(uint8_t c)
   SPI.endTransaction();
 }
 
-void GxEPD2_EPD::_writeData(uint8_t d)
-{
+void GxEPD2_EPD::_writeData(uint8_t d) {
   SPI.beginTransaction(_spi_settings);
   if (_cs >= 0) digitalWrite(_cs, LOW);
   SPI.transfer(d);
@@ -117,8 +110,7 @@ void GxEPD2_EPD::_writeData(uint8_t d)
   SPI.endTransaction();
 }
 
-void GxEPD2_EPD::_writeData(const uint8_t* data, uint16_t n)
-{
+void GxEPD2_EPD::_writeData(const uint8_t* data, uint16_t n) {
   SPI.beginTransaction(_spi_settings);
   if (_cs >= 0) digitalWrite(_cs, LOW);
   for (uint16_t i = 0; i < n; i++)
@@ -129,8 +121,7 @@ void GxEPD2_EPD::_writeData(const uint8_t* data, uint16_t n)
   SPI.endTransaction();
 }
 
-void GxEPD2_EPD::_writeDataPGM(const uint8_t* data, uint16_t n, uint16_t fill_with_zeroes)
-{
+void GxEPD2_EPD::_writeDataPGM(const uint8_t* data, uint16_t n, uint16_t fill_with_zeroes) {
   SPI.beginTransaction(_spi_settings);
   if (_cs >= 0) digitalWrite(_cs, LOW);
   for (uint16_t i = 0; i < n; i++) {
@@ -144,8 +135,7 @@ void GxEPD2_EPD::_writeDataPGM(const uint8_t* data, uint16_t n, uint16_t fill_wi
   SPI.endTransaction();
 }
 
-void GxEPD2_EPD::_writeCommandData(const uint8_t* pCommandData, uint8_t datalen)
-{
+void GxEPD2_EPD::_writeCommandData(const uint8_t* pCommandData, uint8_t datalen) {
   SPI.beginTransaction(_spi_settings);
   if (_dc >= 0) digitalWrite(_dc, LOW);
   if (_cs >= 0) digitalWrite(_cs, LOW);
@@ -158,8 +148,7 @@ void GxEPD2_EPD::_writeCommandData(const uint8_t* pCommandData, uint8_t datalen)
   SPI.endTransaction();
 }
 
-void GxEPD2_EPD::_writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datalen)
-{
+void GxEPD2_EPD::_writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datalen) {
   SPI.beginTransaction(_spi_settings);
   if (_dc >= 0) digitalWrite(_dc, LOW);
   if (_cs >= 0) digitalWrite(_cs, LOW);

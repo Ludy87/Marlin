@@ -44,26 +44,25 @@
 // Do our own checks and defines here for good measure...
 
 #ifndef pgm_read_byte
- #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
+  #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
 #endif
 #ifndef pgm_read_word
- #define pgm_read_word(addr) (*(const unsigned short *)(addr))
+  #define pgm_read_word(addr) (*(const unsigned short *)(addr))
 #endif
 #ifndef pgm_read_dword
- #define pgm_read_dword(addr) (*(const unsigned long *)(addr))
+  #define pgm_read_dword(addr) (*(const unsigned long *)(addr))
 #endif
 
 // Pointers are a peculiar case...typically 16-bit on AVR boards,
 // 32 bits elsewhere.  Try to accommodate both...
 
 #if !defined(__INT_MAX__) || (__INT_MAX__ > 0xFFFF)
- #define pgm_read_pointer(addr) ((void *)pgm_read_dword(addr))
+  #define pgm_read_pointer(addr) ((void *)pgm_read_dword(addr))
 #else
- #define pgm_read_pointer(addr) ((void *)pgm_read_word(addr))
+  #define pgm_read_pointer(addr) ((void *)pgm_read_word(addr))
 #endif
 
-inline GFXglyph * pgm_read_glyph_ptr(const GFXfont *gfxFont, uint8_t c)
-{
+inline GFXglyph * pgm_read_glyph_ptr(const GFXfont *gfxFont, uint8_t c) {
 #ifdef __AVR__
     return &(((GFXglyph *)pgm_read_pointer(&gfxFont->glyph))[c]);
 #else
@@ -74,8 +73,7 @@ inline GFXglyph * pgm_read_glyph_ptr(const GFXfont *gfxFont, uint8_t c)
 #endif //__AVR__
 }
 
-inline uint8_t * pgm_read_bitmap_ptr(const GFXfont *gfxFont)
-{
+inline uint8_t * pgm_read_bitmap_ptr(const GFXfont *gfxFont) {
 #ifdef __AVR__
     return (uint8_t *)pgm_read_pointer(&gfxFont->bitmap);
 #else
@@ -102,8 +100,7 @@ inline uint8_t * pgm_read_bitmap_ptr(const GFXfont *gfxFont)
 */
 /**************************************************************************/
 Adafruit_GFX::Adafruit_GFX(int16_t w, int16_t h):
-WIDTH(w), HEIGHT(h)
-{
+WIDTH(w), HEIGHT(h) {
     _width    = WIDTH;
     _height   = HEIGHT;
     rotation  = 0;
@@ -1487,8 +1484,7 @@ Adafruit_GFX_Button::Adafruit_GFX_Button() {
 void Adafruit_GFX_Button::initButton(
  Adafruit_GFX *gfx, int16_t x, int16_t y, uint16_t w, uint16_t h,
  uint16_t outline, uint16_t fill, uint16_t textcolor,
- char *label, uint8_t textsize)
-{
+ char *label, uint8_t textsize) {
   // Tweak arguments and pass to the newer initButtonUL() function...
   initButtonUL(gfx, x - (w / 2), y - (h / 2), w, h, outline, fill,
     textcolor, label, textsize);
@@ -1514,8 +1510,7 @@ void Adafruit_GFX_Button::initButton(
 void Adafruit_GFX_Button::initButton(
  Adafruit_GFX *gfx, int16_t x, int16_t y, uint16_t w, uint16_t h,
  uint16_t outline, uint16_t fill, uint16_t textcolor,
- char *label, uint8_t textsize_x, uint8_t textsize_y)
-{
+ char *label, uint8_t textsize_x, uint8_t textsize_y) {
   // Tweak arguments and pass to the newer initButtonUL() function...
   initButtonUL(gfx, x - (w / 2), y - (h / 2), w, h, outline, fill,
     textcolor, label, textsize_x, textsize_y);
@@ -1539,8 +1534,7 @@ void Adafruit_GFX_Button::initButton(
 void Adafruit_GFX_Button::initButtonUL(
  Adafruit_GFX *gfx, int16_t x1, int16_t y1, uint16_t w, uint16_t h,
  uint16_t outline, uint16_t fill, uint16_t textcolor,
- char *label, uint8_t textsize)
-{
+ char *label, uint8_t textsize) {
   initButtonUL(gfx, x1, y1, w, h, outline, fill, textcolor, label, textsize, textsize);
 }
 
@@ -1563,8 +1557,7 @@ void Adafruit_GFX_Button::initButtonUL(
 void Adafruit_GFX_Button::initButtonUL(
  Adafruit_GFX *gfx, int16_t x1, int16_t y1, uint16_t w, uint16_t h,
  uint16_t outline, uint16_t fill, uint16_t textcolor,
- char *label, uint8_t textsize_x, uint8_t textsize_y)
-{
+ char *label, uint8_t textsize_x, uint8_t textsize_y) {
   _x1           = x1;
   _y1           = y1;
   _w            = w;
