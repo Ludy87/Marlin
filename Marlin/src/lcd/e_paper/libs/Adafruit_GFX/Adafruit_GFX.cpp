@@ -173,7 +173,7 @@ void Adafruit_GFX::writeLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1,
    @brief    Start a display-writing routine, overwrite in subclasses.
 */
 /**************************************************************************/
-void Adafruit_GFX::startWrite(){
+void Adafruit_GFX::startWrite() {
 }
 
 /**************************************************************************/
@@ -184,7 +184,7 @@ void Adafruit_GFX::startWrite(){
    @param    color 16-bit 5-6-5 Color to fill with
 */
 /**************************************************************************/
-void Adafruit_GFX::writePixel(int16_t x, int16_t y, uint16_t color){
+void Adafruit_GFX::writePixel(int16_t x, int16_t y, uint16_t color) {
     drawPixel(x, y, color);
 }
 
@@ -243,7 +243,7 @@ void Adafruit_GFX::writeFillRect(int16_t x, int16_t y, int16_t w, int16_t h,
    @brief    End a display-writing routine, overwrite in subclasses if startWrite is defined!
 */
 /**************************************************************************/
-void Adafruit_GFX::endWrite(){
+void Adafruit_GFX::endWrite() {
 }
 
 /**************************************************************************/
@@ -320,10 +320,10 @@ void Adafruit_GFX::fillScreen(uint16_t color) {
 void Adafruit_GFX::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1,
         uint16_t color) {
     // Update in subclasses if desired!
-    if(x0 == x1){
+    if(x0 == x1) {
         if(y0 > y1) _swap_int16_t(y0, y1);
         drawFastVLine(x0, y0, y1 - y0 + 1, color);
-    } else if(y0 == y1){
+    } else if(y0 == y1) {
         if(x0 > x1) _swap_int16_t(x0, x1);
         drawFastHLine(x0, y0, x1 - x0 + 1, color);
     } else {
