@@ -125,6 +125,9 @@ void MarlinUI::show_bootscreen() {
 }
 
 void MarlinUI::init_lcd() {
+  #if defined(SW_EPAPER_SCK) && defined(SW_EPAPER_MOSI)
+    epaper.epd2.init(SW_EPAPER_SCK, SW_EPAPER_MOSI, true, false);
+  #endif
   epaper.init();
   epaper.clearScreen();
   epaper.setFullWindow();
