@@ -136,34 +136,37 @@ class U8G2_FOR_ADAFRUIT_GFX : public Print {
     uint16_t encoding;    // the unicode, detected by the utf-8 decoder
     uint8_t utf8_state;   // current state of the utf-8 decoder, contains the remaining bytes for a detected unicode glyph
 
-    void home() { tx = 0; ty = 0; utf8_state = 0; }
-    void setCursor(uint16_t x, uint16_t y) { tx = x; ty = y; utf8_state = 0; }
-    int16_t getCursorX() { return tx; }
-    int16_t getCursorY() { return ty; }
+    void home(void)
+      { tx = 0; ty = 0;  utf8_state = 0; }
+    void setCursor(int16_t x, int16_t y)
+      { tx = x; ty = y; utf8_state = 0;  }
+    int16_t getCursorX(void) { return tx; }
+    int16_t getCursorY(void) { return ty; }
 
-    U8G2_FOR_ADAFRUIT_GFX() {u8g2.font = NULL; u8g2.font_decode.fg_color = 1; u8g2.font_decode.is_transparent = 1; u8g2.font_decode.dir = 0; home(); }
+    U8G2_FOR_ADAFRUIT_GFX(void) {u8g2.font = NULL; u8g2.font_decode.fg_color = 1; u8g2.font_decode.is_transparent = 1; u8g2.font_decode.dir = 0; home(); }
     void begin(Adafruit_GFX &gfx) { u8g2.gfx = &gfx; }
-    void setFont(const uint8_t *font)          // set u8g2 font
+    void setFont(const uint8_t *font)             // set u8g2 font
       { u8g2_SetFont(&u8g2, font); }
-    void setFontMode(uint8_t is_transparent)   // is_transparent==0: Background is not drawn
+    void setFontMode(uint8_t is_transparent)      // is_transparent==0: Background is not drawn
       { u8g2_SetFontMode(&u8g2, is_transparent); }
-    void setFontDirection(uint8_t d)           // 0; 0 degree, 1: 90 degree, 2: 180 degree, 3: 270 degree
+    void setFontDirection(uint8_t d)              // 0; 0 degree, 1: 90 degree, 2: 180 degree, 3: 270 degree
       { u8g2_SetFontDirection(&u8g2, d); }
-    void setForegroundColor(uint16_t fg)       // Use this color to draw the text
+    void setForegroundColor(uint16_t fg)           // Use this color to draw the text
       { u8g2_SetForegroundColor(&u8g2, fg); }
-    void setBackgroundColor(uint16_t bg)       // only used for setFontMode(0)
+    void setBackgroundColor(uint16_t bg)           // only used for setFontMode(0)
       { u8g2_SetBackgroundColor(&u8g2, bg); }
-    int8_t getFontAscent()
+    int8_t getFontAscent(void)
       { return u8g2.font_info.ascent_A; }
-    int8_t getFontDescent()
+    int8_t getFontDescent(void)
       { return u8g2.font_info.descent_g; }
     int16_t drawGlyph(int16_t x, int16_t y, uint16_t e)
-      { return u8g2_DrawGlyph(&u8g2, x, y, e); }  // draw a signle char (e == Unicode)
+      { return u8g2_DrawGlyph(&u8g2, x, y, e); }           // draw a signle char (e == Unicode)
     int16_t drawStr(int16_t x, int16_t y, const char *s)
       { return u8g2_DrawStr(&u8g2, x, y, s); }
 
     int16_t drawUTF8(int16_t x, int16_t y, const char *str);
     int16_t getUTF8Width(const char *str);
+
 
     uint16_t utf8_next(uint8_t b);
 
@@ -171,15 +174,20 @@ class U8G2_FOR_ADAFRUIT_GFX : public Print {
       uint16_t e = utf8_next(v);
       int16_t delta;
 
-      if ( e == '\n' ) {
-        tx = 0;
-        ty += u8g2.font_info.ascent_para - u8g2.font_info.descent_para;
+      if ( e == '\n' )
+      {
+	tx = 0;
+	ty += u8g2.font_info.ascent_para - u8g2.font_info.descent_para;
       }
       else if ( e == '\r' )
-        tx = 0;
-      else if ( e < 0x0fffe ) {
+      {
+	tx = 0;
+      }
+      else if ( e < 0x0fffe )
+      {
         delta = drawGlyph(tx, ty, e);
-        switch(u8g2.font_decode.dir) {
+        switch(u8g2.font_decode.dir)
+        {
           case 0:
             tx += delta;
             break;

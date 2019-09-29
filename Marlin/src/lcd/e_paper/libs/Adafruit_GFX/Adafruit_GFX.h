@@ -49,18 +49,18 @@ class Adafruit_GFX : public Print {
   Adafruit_GFX(int16_t w, int16_t h); // Constructor
 
   // This MUST be defined by the subclass:
-  virtual void drawPixel(int16_t x, int16_t y, uint16_t color) = 0;  //< Virtual drawPixel() function to draw to the screen/framebuffer/etc, must be overridden in subclass. @param x X coordinate.  @param y Y coordinate. @param color 16-bit pixel color.
+  virtual void drawPixel(int16_t x, int16_t y, uint16_t color) = 0;    ///< Virtual drawPixel() function to draw to the screen/framebuffer/etc, must be overridden in subclass. @param x X coordinate.  @param y Y coordinate. @param color 16-bit pixel color.
 
   // TRANSACTION API / CORE DRAW API
   // These MAY be overridden by the subclass to provide device-specific
   // optimized code.  Otherwise 'generic' versions are used.
-  virtual void startWrite();
+  virtual void startWrite(void);
   virtual void writePixel(int16_t x, int16_t y, uint16_t color);
   virtual void writeFillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
   virtual void writeFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
   virtual void writeFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
   virtual void writeLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color);
-  virtual void endWrite();
+  virtual void endWrite(void);
 
   // CONTROL API
   // These MAY be overridden by the subclass to provide device-specific
@@ -207,7 +207,7 @@ class Adafruit_GFX : public Print {
     @returns    Width in pixels
   */
   /************************************************************************/
-  int16_t width() const { return _width; };
+  int16_t width(void) const { return _width; };
 
   /************************************************************************/
   /*!
@@ -215,7 +215,7 @@ class Adafruit_GFX : public Print {
     @returns    Height in pixels
   */
   /************************************************************************/
-  int16_t height() const { return _height; }
+  int16_t height(void) const { return _height; }
 
   /************************************************************************/
   /*!
@@ -223,7 +223,7 @@ class Adafruit_GFX : public Print {
     @returns    0 thru 3 corresponding to 4 cardinal rotations
   */
   /************************************************************************/
-  uint8_t getRotation() const { return rotation; }
+  uint8_t getRotation(void) const { return rotation; }
 
   // get current cursor position (get rotation safe maximum values,
   // using: width() for x, height() for y)
@@ -233,7 +233,7 @@ class Adafruit_GFX : public Print {
     @returns    X coordinate in pixels
   */
   /************************************************************************/
-  int16_t getCursorX() const { return cursor_x; }
+  int16_t getCursorX(void) const { return cursor_x; }
 
   /************************************************************************/
   /*!
@@ -241,7 +241,7 @@ class Adafruit_GFX : public Print {
     @returns    Y coordinate in pixels
   */
   /************************************************************************/
-  int16_t getCursorY() const { return cursor_y; };
+  int16_t getCursorY(void) const { return cursor_y; };
 
  protected:
   void
@@ -274,7 +274,7 @@ class Adafruit_GFX : public Print {
 class Adafruit_GFX_Button {
 
  public:
-  Adafruit_GFX_Button();
+  Adafruit_GFX_Button(void);
   // "Classic" initButton() uses center & size
   void initButton(Adafruit_GFX *gfx, int16_t x, int16_t y,
    uint16_t w, uint16_t h, uint16_t outline, uint16_t fill,
@@ -309,7 +309,7 @@ class Adafruit_GFX_Button {
     @returns  True if pressed
   */
   /**********************************************************************/
-  boolean isPressed() { return currstate; };
+  boolean isPressed(void) { return currstate; };
 
  private:
   Adafruit_GFX *_gfx;
@@ -328,7 +328,7 @@ class Adafruit_GFX_Button {
 class GFXcanvas1 : public Adafruit_GFX {
  public:
   GFXcanvas1(uint16_t w, uint16_t h);
-  ~GFXcanvas1();
+  ~GFXcanvas1(void);
   void     drawPixel(int16_t x, int16_t y, uint16_t color),
            fillScreen(uint16_t color);
   /**********************************************************************/
@@ -337,7 +337,7 @@ class GFXcanvas1 : public Adafruit_GFX {
     @returns  A pointer to the allocated buffer
   */
   /**********************************************************************/
-  uint8_t *getBuffer() const { return buffer; }
+  uint8_t *getBuffer(void) const { return buffer; }
  private:
   uint8_t *buffer;
 };
@@ -347,7 +347,7 @@ class GFXcanvas1 : public Adafruit_GFX {
 class GFXcanvas8 : public Adafruit_GFX {
  public:
   GFXcanvas8(uint16_t w, uint16_t h);
-  ~GFXcanvas8();
+  ~GFXcanvas8(void);
   void     drawPixel(int16_t x, int16_t y, uint16_t color),
            fillScreen(uint16_t color),
            writeFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
@@ -357,7 +357,7 @@ class GFXcanvas8 : public Adafruit_GFX {
    @returns  A pointer to the allocated buffer
   */
   /**********************************************************************/
-  uint8_t *getBuffer() const { return buffer; }
+  uint8_t *getBuffer(void) const { return buffer; }
  private:
   uint8_t *buffer;
 };
@@ -367,17 +367,17 @@ class GFXcanvas8 : public Adafruit_GFX {
 class GFXcanvas16 : public Adafruit_GFX {
  public:
   GFXcanvas16(uint16_t w, uint16_t h);
-  ~GFXcanvas16();
+  ~GFXcanvas16(void);
   void      drawPixel(int16_t x, int16_t y, uint16_t color),
             fillScreen(uint16_t color),
-            byteSwap();
+            byteSwap(void);
   /**********************************************************************/
   /*!
     @brief    Get a pointer to the internal buffer memory
     @returns  A pointer to the allocated buffer
   */
   /**********************************************************************/
-  uint16_t *getBuffer() const { return buffer; }
+  uint16_t *getBuffer(void) const { return buffer; }
  private:
   uint16_t *buffer;
 };
