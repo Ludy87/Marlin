@@ -40,7 +40,7 @@ struct GpioEvent {
   pin_type pin_id;
   GpioEvent::Type event;
 
-  GpioEvent(uint64_t timestamp, pin_type pin_id, GpioEvent::Type event){
+  GpioEvent(uint64_t timestamp, pin_type pin_id, GpioEvent::Type event) {
     this->timestamp = timestamp;
     this->pin_id = pin_id;
     this->event = event;
@@ -49,13 +49,13 @@ struct GpioEvent {
 
 class IOLogger {
 public:
-  virtual ~IOLogger(){};
+  virtual ~IOLogger() {};
   virtual void log(GpioEvent ev) = 0;
 };
 
 class Peripheral {
 public:
-  virtual ~Peripheral(){};
+  virtual ~Peripheral() {};
   virtual void interrupt(GpioEvent ev) = 0;
   virtual void update() = 0;
 };
