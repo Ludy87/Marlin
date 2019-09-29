@@ -29,14 +29,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _GxEPD2_GFX_H_
-#define _GxEPD2_GFX_H_
+#pragma once
 
-#include <Adafruit_GFX.h>
+#include "../libs/Adafruit_GFX/Adafruit_GFX.h"
 #include "GxEPD2_EPD.h"
 
-class GxEPD2_GFX : public Adafruit_GFX
-{
+class GxEPD2_GFX : public Adafruit_GFX {
   public:
     GxEPD2_GFX(GxEPD2_EPD& _epd2, uint16_t w, uint16_t h) : Adafruit_GFX(w, h), epd2(_epd2) {};
     virtual uint16_t pages() = 0;
@@ -100,5 +98,3 @@ class GxEPD2_GFX : public Adafruit_GFX
   public:
     GxEPD2_EPD& epd2;
 };
-
-#endif

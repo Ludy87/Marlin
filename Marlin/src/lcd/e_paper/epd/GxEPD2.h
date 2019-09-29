@@ -29,8 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _GxEPD2_H_
-#define _GxEPD2_H_
+#pragma once
 
 #include <Arduino.h>
 #include <SPI.h>
@@ -44,11 +43,9 @@
 //#define GxEPD_YELLOW    GxEPD_RED
 //#define GxEPD_COLORED   GxEPD_RED
 
-class GxEPD2
-{
+class GxEPD2 {
   public:
-    enum Panel
-    {
+    enum Panel {
       GDEP015OC1, Waveshare_1_54_bw = GDEP015OC1,
       GDE0213B1,  Waveshare_2_13_bw = GDE0213B1,
       GDEH0213B72,  Waveshare_2_13_bw_B72 = GDEH0213B72,
@@ -75,5 +72,3 @@ class GxEPD2
       GDEW075Z08,  Waveshare_7_5_bwr_Z08 = GDEW075Z08
     };
 };
-
-#endif

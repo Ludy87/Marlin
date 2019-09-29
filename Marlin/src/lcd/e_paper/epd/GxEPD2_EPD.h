@@ -29,8 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _GxEPD2_EPD_H_
-#define _GxEPD2_EPD_H_
+#pragma once
 
 #include <Arduino.h>
 #include <SPI.h>
@@ -120,5 +119,3 @@ class GxEPD2_EPD
   private:
     bool sw_spi;
 };
-
-#endif
