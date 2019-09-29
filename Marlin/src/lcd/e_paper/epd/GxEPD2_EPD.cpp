@@ -30,11 +30,12 @@
  */
 
 #include "GxEPD2_EPD.h"
+#include <SPI.h>
 
 #if defined(ESP8266) || defined(ESP32)
-#include <pgmspace.h>
+  #include <pgmspace.h>
 #else
-#include <avr/pgmspace.h>
+  #include <avr/pgmspace.h>
 #endif
 
 GxEPD2_EPD::GxEPD2_EPD(int8_t cs, int8_t dc, int8_t rst, int8_t busy, int8_t busy_level, uint32_t busy_timeout,
@@ -71,7 +72,7 @@ void GxEPD2_EPD::init(bool initial, bool pulldown_rst_mode) {
   _reset();
   if (_busy >= 0)
     pinMode(_busy, INPUT);
-  if (_sck < 0)
+  if (sw_spi == false)
     SPI.begin();
 }
 
@@ -193,11 +194,11 @@ void GxEPD2_EPD::_writeCommandDataPGM(const uint8_t* pCommandData, uint8_t datal
 }
 
 void GxEPD2_EPD::_beginTransaction(const SPISettings& settings) {
-  if (_sck < 0) SPI.beginTransaction(settings);
+  if (sw_spi == false) SPI.beginTransaction(settings);
 }
 
 void GxEPD2_EPD::_transfer(uint8_t data) {
-  if (_sck < 0) SPI.transfer(data);
+  if (sw_spi == false) SPI.transfer(data);
   else {
     for (int i = 0; i < 8; i++) {
       digitalWrite(_mosi, (data & 0x80) ? HIGH : LOW);
@@ -209,5 +210,5 @@ void GxEPD2_EPD::_transfer(uint8_t data) {
 }
 
 void GxEPD2_EPD::_endTransaction() {
-  if (_sck < 0) SPI.endTransaction();
+  if (sw_spi == false) SPI.endTransaction();
 }
