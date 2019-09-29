@@ -55,7 +55,7 @@
 
 #include "../../inc/MarlinConfig.h"
 
-#if HAS_GRAPHICAL_LCD
+#if HAS_GRAPHICAL_LCD && DISABLED(E_PAPER)
 
 #include <U8glib.h>
 #include "HAL_LCD_com_defines.h"

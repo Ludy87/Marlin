@@ -57,7 +57,7 @@
 
 #include "../../inc/MarlinConfig.h"
 
-#if HAS_GRAPHICAL_LCD && PIN_EXISTS(FSMC_CS)
+#if HAS_GRAPHICAL_LCD && PIN_EXISTS(FSMC_CS) && DISABLED(E_PAPER)
 
 #include "HAL_LCD_com_defines.h"
 #include "ultralcd_DOGM.h"

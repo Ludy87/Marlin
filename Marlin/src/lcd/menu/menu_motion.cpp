@@ -32,7 +32,7 @@
 
 #include "../lcdprint.h"
 
-#if HAS_GRAPHICAL_LCD
+#if HAS_GRAPHICAL_LCD && DISABLED(E_PAPER)
   #include "../dogm/ultralcd_DOGM.h"
 #endif
 
