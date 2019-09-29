@@ -70,9 +70,7 @@
 #define DO_DRAW_CHAMBER (HAS_TEMP_CHAMBER && STATUS_CHAMBER_WIDTH && HOTENDS <= 4)
 #define DO_DRAW_FAN     (HAS_FAN0)
 
-#define HOTEND_ALT(N)   false
-#define BED_ALT()       false
-#define CHAMBER_ALT()   false
+//#define CHAMBER_ALT false
 
 #if HOTENDS
   #define MAX_HOTEND_DRAW _MIN(HOTENDS, ((LCD_PIXEL_WIDTH) / (STATUS_HEATERS_XSPACE)))
@@ -125,7 +123,7 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
   #if ENABLED(MARLIN_DEV_MODE)
     constexpr bool isHeat = true;
   #else
-    const bool isHeat = IFBED(BED_ALT(), HOTEND_ALT(heater));
+    const bool isHeat = false;
   #endif
 
   #if ENABLED(MARLIN_DEV_MODE)
@@ -140,8 +138,8 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
   #define HOTEND_DOT    isHeat
 
   #if DO_DRAW_BED
-    #define STATIC_BED    true
-    #define BED_DOT       isHeat
+    #define STATIC_BED  true
+    #define BED_DOT     isHeat
   #endif
 
   #define OFF_BMP(N) bitmap_heater
@@ -301,7 +299,7 @@ void MarlinUI::draw_status_screen() {
 
   #if DO_DRAW_BED && DISABLED(STATUS_COMBINE_HEATERS)
     #define BED_BITMAP(S) bitmap_bed
-    
+
     #define STATUS_BED_HEIGHT BED_BMPHEIGHT
     #define STATUS_BED_Y (100 - STATUS_BED_HEIGHT)
     //#define STATUS_BED_X (8)
@@ -324,8 +322,8 @@ u8g2_gfx.print(bedy);
       u8g.drawBitmapP(STATUS_CHAMBER_X, chambery, STATUS_CHAMBER_BYTEWIDTH, chamberh, CHAMBER_BITMAP(CHAMBER_ALT()));
   #endif*/
 
-  #if DO_DRAW_FAN
-    epaper.drawXBitmap(LCD_PIXEL_WIDTH - FAN_WIDTH, FONT_ASCENT + FONT_HEIGHT - FONT_DESCENT, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
+  #if DO_DRAW_FAN //FONT_ASCENT + FONT_HEIGHT * 2 - FONT_DESCENT
+    epaper.drawXBitmap(LCD_PIXEL_WIDTH - FAN_WIDTH, position_degrees_image_degrees(2) - (FONT_DESCENT) + 2, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
   #endif// hier gehts weiter
 
   //
@@ -358,7 +356,7 @@ u8g2_gfx.print(bedy);
           c = '*';
         }
       #endif
-      //lcd_put_u8str(STATUS_FAN_TEXT_X - 12, FAN_HEIGHT + FONT_ASCENT + FONT_HEIGHT *2 - FONT_DESCENT, i16tostr3(thermalManager.fanPercent(spd)));
+      lcd_put_u8str(LCD_PIXEL_WIDTH - FAN_WIDTH, position_degrees_image_degrees(3) + (FAN_HEIGHT) - (FONT_DESCENT), i16tostr3(thermalManager.fanPercent(spd)));
       lcd_put_wchar(c);
     }
   #endif
