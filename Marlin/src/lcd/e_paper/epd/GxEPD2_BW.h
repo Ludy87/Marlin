@@ -29,8 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _GxEPD2_BW_H_
-#define _GxEPD2_BW_H_
+#pragma once
 
 //#include <Adafruit_GFX.h>
 #include "../libs/Adafruit_GFX/Adafruit_GFX.h"
@@ -82,7 +81,7 @@ template<typename GxEPD2_Type, const uint16_t page_height>
       return m;
     }
 
-    void drawPixel(uint16_t x, uint16_t y, uint16_t color) {
+    void drawPixel(int16_t x, int16_t y, uint16_t color) {
       if ((x < 0) || (x >= width()) || (y < 0) || (y >= height())) return;
       if (_mirror) x = width() - x - 1;
       // check rotation, move pixel around if necessary
@@ -167,7 +166,7 @@ template<typename GxEPD2_Type, const uint16_t page_height>
       epd2.writeImagePart(_buffer, x, y_part, WIDTH, _page_height, x, y, w, h);
       epd2.refresh(x, y, w, h);
       if (epd2.hasFastPartialUpdate)
-        epd2.writeImagePartAgain(_buffer, x, y, WIDTH, _page_height, x, y, w, h);
+        epd2.writeImagePartAgain(_buffer, x, y_part, WIDTH, _page_height, x, y, w, h);
     }
 
     void setFullWindow() {
@@ -219,8 +218,8 @@ template<typename GxEPD2_Type, const uint16_t page_height>
           if (epd2.hasFastPartialUpdate) {
             epd2.writeImageAgain(_buffer, 0, 0, WIDTH, HEIGHT);
             //epd2.refresh(true); // not needed
-            epd2.powerOff();
           }
+          epd2.powerOff();
         }
         return false;
       }
@@ -341,12 +340,12 @@ template<typename GxEPD2_Type, const uint16_t page_height>
       _current_page = 0;
     }
 
-    void drawInvertedBitmap(uint16_t x, uint16_t y, const uint8_t bitmap[], uint16_t w, uint16_t h, uint16_t color) {
+    void drawInvertedBitmap(int16_t x, int16_t y, const uint8_t bitmap[], int16_t w, int16_t h, uint16_t color) {
       // taken from Adafruit_GFX.cpp, modified
-      uint16_t byteWidth = (w + 7) / 8; // Bitmap scanline pad = whole byte
+      int16_t byteWidth = (w + 7) / 8; // Bitmap scanline pad = whole byte
       uint8_t byte = 0;
-      for (uint16_t j = 0; j < h; j++) {
-        for (uint16_t i = 0; i < w; i++ ) {
+      for (int16_t j = 0; j < h; j++) {
+        for (int16_t i = 0; i < w; i++ ) {
           if (i & 7) byte <<= 1;
           else {
             #if defined(__AVR) || defined(ESP8266) || defined(ESP32)
@@ -369,61 +368,61 @@ template<typename GxEPD2_Type, const uint16_t page_height>
       epd2.writeScreenBuffer(value);
     }
     // write to controller memory, without screen refresh; x and w should be multiple of 8
-    void writeImage(const uint8_t bitmap[], uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) {
+    void writeImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) {
       epd2.writeImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
-    void writeImagePart(const uint8_t bitmap[], uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
-                        uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) {
+    void writeImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+                        int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) {
       epd2.writeImagePart(bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
-    void writeImage(const uint8_t* black, const uint8_t* color, uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert, bool mirror_y, bool pgm) {
+    void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) {
       epd2.writeImage(black, color, x, y, w, h, invert, mirror_y, pgm);
     }
-    void writeImage(const uint8_t* black, const uint8_t* color, uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
+    void writeImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h) {
       epd2.writeImage(black, color, x, y, w, h, false, false, false);
     }
-    void writeImagePart(const uint8_t* black, const uint8_t* color, uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
-                        uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert, bool mirror_y, bool pgm) {
+    void writeImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+                        int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) {
       epd2.writeImagePart(black, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
-    void writeImagePart(const uint8_t* black, const uint8_t* color, uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
-                        uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
+    void writeImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+                        int16_t x, int16_t y, int16_t w, int16_t h) {
       epd2.writeImagePart(black, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, false, false, false);
     }
     // write sprite of native data to controller memory, without screen refresh; x and w should be multiple of 8
-    void writeNative(const uint8_t* data1, const uint8_t* data2, uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert, bool mirror_y, bool pgm) {
+    void writeNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) {
       epd2.writeNative(data1, data2, x, y, w, h, invert, mirror_y, pgm);
     }
     // write to controller memory, with screen refresh; x and w should be multiple of 8
-    void drawImage(const uint8_t bitmap[], uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) {
+    void drawImage(const uint8_t bitmap[], int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) {
       epd2.drawImage(bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
-    void drawImagePart(const uint8_t bitmap[], uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
-                        uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) {
+    void drawImagePart(const uint8_t bitmap[], int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+                       int16_t x, int16_t y, int16_t w, int16_t h, bool invert = false, bool mirror_y = false, bool pgm = false) {
       epd2.drawImagePart(bitmap, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
-    void drawImage(const uint8_t* black, const uint8_t* color, uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert, bool mirror_y, bool pgm) {
+    void drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) {
       epd2.drawImage(black, color, x, y, w, h, invert, mirror_y, pgm);
     }
-    void drawImage(const uint8_t* black, const uint8_t* color, uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
+    void drawImage(const uint8_t* black, const uint8_t* color, int16_t x, int16_t y, int16_t w, int16_t h) {
       epd2.drawImage(black, color, x, y, w, h, false, false, false);
     }
-    void drawImagePart(const uint8_t* black, const uint8_t* color, uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
-                        uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert, bool mirror_y, bool pgm) {
+    void drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+                       int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) {
       epd2.drawImagePart(black, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, invert, mirror_y, pgm);
     }
-    void drawImagePart(const uint8_t* black, const uint8_t* color, uint16_t x_part, uint16_t y_part, uint16_t w_bitmap, uint16_t h_bitmap,
-                        uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
+    void drawImagePart(const uint8_t* black, const uint8_t* color, int16_t x_part, int16_t y_part, int16_t w_bitmap, int16_t h_bitmap,
+                       int16_t x, int16_t y, int16_t w, int16_t h) {
       epd2.drawImagePart(black, color, x_part, y_part, w_bitmap, h_bitmap, x, y, w, h, false, false, false);
     }
     // write sprite of native data to controller memory, with screen refresh; x and w should be multiple of 8
-    void drawNative(const uint8_t* data1, const uint8_t* data2, uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool invert, bool mirror_y, bool pgm) {
+    void drawNative(const uint8_t* data1, const uint8_t* data2, int16_t x, int16_t y, int16_t w, int16_t h, bool invert, bool mirror_y, bool pgm) {
       epd2.drawNative(data1, data2, x, y, w, h, invert, mirror_y, pgm);
     }
     void refresh(bool partial_update_mode = false) { // screen refresh from controller memory to full screen
       epd2.refresh(partial_update_mode);
     }
-    void refresh(uint16_t x, uint16_t y, uint16_t w, uint16_t h) { // screen refresh from controller memory, partial screen
+    void refresh(int16_t x, int16_t y, int16_t w, int16_t h) { // screen refresh from controller memory, partial screen
       epd2.refresh(x, y, w, h);
     }
     // turns off generation of panel driving voltages, avoids screen fading over time
@@ -469,9 +468,7 @@ template<typename GxEPD2_Type, const uint16_t page_height>
     uint8_t _buffer[(GxEPD2_Type::WIDTH / 8) * page_height];
     bool _using_partial_mode, _second_phase, _mirror, _reverse;
     uint16_t _width_bytes, _pixel_bytes;
-    uint16_t _current_page;
+    int16_t _current_page;
     uint16_t _pages, _page_height;
     uint16_t _pw_x, _pw_y, _pw_w, _pw_h;
 };
-
-#endif
