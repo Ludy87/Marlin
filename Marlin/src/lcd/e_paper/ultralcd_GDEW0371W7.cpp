@@ -33,7 +33,7 @@
 #include "epd/GxEPD2_BW.h"
 #include "libs/U8g2_for_Adafruit_GFX/src/U8g2_for_Adafruit_GFX.h"
 
-EPAPER_CLASS epaper(GxEPD2_371(CS_PIN, DC_PIN, RST_PIN, BUSY_PIN));
+EPAPER_CLASS epaper(GxEPD2_371(SW_EPAPER_CS_PIN, SW_EPAPER_DC_PIN, SW_EPAPER_RST_PIN, SW_EPAPER_BUSY_PIN));
 U8G2_ADAFRUIT_GFX_CLASS u8g2_gfx;
 
 #include "epd/marlin_old_250.h"
