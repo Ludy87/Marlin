@@ -34,6 +34,10 @@
 #include "epd/icons.h"
 #include "epd/fan.h"
 
+auto position_degrees_image_degrees = [&](const uint8_t i) {
+  return (FONT_HEIGHT) * i + (FONT_ASCENT) - (FONT_DESCENT);
+};
+
 #define STATUS_HEATERS_XSPACE 25
 
 #define STATUS_HEATER_X(V,I) (HOTENDS >= I ? (V + (STATUS_HEATERS_XSPACE + HEATER_BMPWIDTH) * I) : 0)
