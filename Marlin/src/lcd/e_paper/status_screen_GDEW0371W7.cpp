@@ -395,7 +395,7 @@ void MarlinUI::draw_status_screen() {
                             // 54 + (128 / 2) - len * (9 / 2)
       #define SD_DURATION_X (LCD_PIXEL_WIDTH - (FONT_WIDTH * len))
     #else
-      #define SD_DURATION_X (LCD_PIXEL_WIDTH - len * MENU_FONT_WIDTH)
+      #define SD_DURATION_X (LCD_PIXEL_WIDTH - len * FONT_WIDTH)
     #endif
 
     char buffer[13];
