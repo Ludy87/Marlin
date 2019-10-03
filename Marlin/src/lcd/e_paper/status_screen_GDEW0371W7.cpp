@@ -60,8 +60,8 @@
 #define X_VALUE_POS     FONT_WIDTH * 2
 #define XYZF_SPACING    LCD_PIXEL_WIDTH / 4
 #define XYZ_BASELINE    30 + FONT_ASCENT + FONT_DESCENT
-#define EXTRAS_BASELINE 40 + FONT_ASCENT
-#define STATUS_BASELINE LCD_PIXEL_HEIGHT - FONT_HEIGHT
+#define EXTRAS_BASELINE LCD_PIXEL_HEIGHT - FONT_HEIGHT * 3 - FONT_DESCENT - FONT_ASCENT
+#define STATUS_BASELINE LCD_PIXEL_HEIGHT - FONT_HEIGHT - FONT_DESCENT
 
 #define DO_DRAW_LOGO    (STATUS_LOGO_WIDTH && ENABLED(CUSTOM_STATUS_SCREEN_IMAGE))
 #define DO_DRAW_BED     (HAS_HEATED_BED && BED_BMPWIDTH)
@@ -74,12 +74,12 @@
 #define DO_DRAW_FAN5    HAS_FAN5
 
 #if HOTENDS
-  #define MAX_HOTEND_DRAW _MIN(HOTENDS, ((LCD_PIXEL_WIDTH) / (STATUS_HEATERS_XSPACE)))
+  #define MAX_HOTEND_DRAW HOTENDS
 #endif
 
 //
-// Before homing, blink '123' <-> '???'.
-// Homed but unknown... '123' <-> '   '.
+// Before homing, blink '123' <-> '123*'.
+// Homed but unknown... '123' <-> ' N/A'.
 // Homed and known, display constantly.
 //
 FORCE_INLINE void _draw_axis_value(const AxisEnum axis, const char *value) {
@@ -115,11 +115,8 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
     #define IFBED(A,B) (B)
   #endif
 
-  #if ENABLED(MARLIN_DEV_MODE)
-    constexpr bool isHeat = true;
-  #else
-    const bool isHeat = false;
-  #endif
+  const bool isHeat = false;
+
   #if ENABLED(MARLIN_DEV_MODE)
     const float temp = 20 + (millis() >> 8) % IFBED(100, 200),
               target = IFBED(100, 200);
@@ -134,6 +131,9 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
   #if DO_DRAW_BED
     #define STATIC_BED  true
     #define BED_DOT     isHeat
+  #else
+    #define STATIC_BED  false
+    #define BED_DOT     false
   #endif
 
   #define BAR_TALL (STATUS_HEATERS_HEIGHT - 2)
@@ -158,19 +158,6 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
     #endif
   }
 
-  // Draw a heating progress bar, if specified
-  #if DO_DRAW_BED && ENABLED(STATUS_HEAT_PERCENT)
-    if (IFBED(true, STATIC_HOTEND) && isHeat) {
-      const uint8_t bx = IFBED(STATUS_BED_BMP_X + STATUS_BED_WIDTH - 1, STATUS_HOTEND_X(heater) + position_degrees_image_degrees(3)) + 1;
-      u8g.drawFrame(bx, STATUS_HEATERS_Y, 3, STATUS_HEATERS_HEIGHT);
-      if (tall) {
-        const uint8_t ph = STATUS_HEATERS_HEIGHT - 1 - tall;
-        if (PAGE_OVER(STATUS_HEATERS_Y + ph))
-          u8g.drawVLine(bx + 1, STATUS_HEATERS_Y + ph, tall);
-      }
-    }
-  #endif
-
   #if HEATER_IDLE_HANDLER
     const bool is_idle = IFBED(thermalManager.bed_idle.timed_out, thermalManager.hotend_idle[heater].timed_out),
                 dodraw = (blink || !is_idle);
@@ -183,15 +170,6 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
   if (dodraw) _draw_centered_temp(target + 0.5f, tx, position_degrees_image_degrees(2));
 
   _draw_centered_temp(temp + 0.5f, tx, position_degrees_image_degrees(3) + (HEATER_BMPHEIGHT) - (FONT_DESCENT));
-
-  if (IFBED(STATIC_BED && BED_DOT, STATIC_HOTEND && HOTEND_DOT)) {
-    //u8g2_gfx.setBackgroundColor(GxEPD_BLACK); // set to white on black
-    //u8g2_gfx.setForegroundColor(GxEPD_WHITE); // set to white on black
-    //epaper.drawRect(tx + 20, IFBED(102-2, 20-3), 50, 50, GxEPD_BLACK);
-    //u8g.drawBox(tx, IFBED(20-2, 20-3), 2, 2);
-    //u8g2_gfx.setBackgroundColor(GxEPD_WHITE); // set to white on black
-    //u8g2_gfx.setForegroundColor(GxEPD_BLACK); // set to white on black
-  }
 
 }
 
@@ -254,23 +232,14 @@ void MarlinUI::draw_status_screen() {
 
   const bool blink = get_blink();
 
-  // Status Menu Font
-  //set_font(FONT_STATUSMENU);
-
   #if ENABLED(MARLIN_DEV_MODE)
     TCNT5 = 0;
   #endif
 
-  /*#if DO_DRAW_LOGO
-    if (PAGE_CONTAINS(STATUS_LOGO_Y, STATUS_LOGO_Y + STATUS_LOGO_HEIGHT - 1))
-      u8g.drawBitmapP(STATUS_LOGO_X, STATUS_LOGO_Y, STATUS_LOGO_BYTEWIDTH, STATUS_LOGO_HEIGHT, status_logo_bmp);
-  #endif*/
-
-  /*#if STATUS_HEATERS_WIDTH
-    // Draw all heaters (and maybe the bed) in one go
-    if (PAGE_CONTAINS(STATUS_HEATERS_Y, STATUS_HEATERS_Y + STATUS_HEATERS_HEIGHT - 1))
-      u8g.drawBitmapP(STATUS_HEATERS_X, STATUS_HEATERS_Y, STATUS_HEATERS_BYTEWIDTH, STATUS_HEATERS_HEIGHT, status_heaters_bmp);
-  #endif*/
+  #if DO_DRAW_LOGO
+    #undef DO_DRAW_FAN5
+    epaper.drawBitmap(STATUS_LOGO_X, STATUS_LOGO_Y, status_logo_bmp, STATUS_LOGO_WIDTH, STATUS_LOGO_HEIGHT, GxEPD_BLACK);
+  #endif
 
   #if DO_DRAW_BED && DISABLED(STATUS_COMBINE_HEATERS)
     #define STATUS_BED_HEIGHT BED_BMPHEIGHT
@@ -288,29 +257,29 @@ void MarlinUI::draw_status_screen() {
     epaper.drawBitmap(chamberx, chambery, bitmap_chamber, CHAMBER_BMPWIDTH, CHAMBER_BMPHEIGHT, GxEPD_BLACK);
   #endif
   #if DO_DRAW_FAN0
-    epaper.drawXBitmap(STATUS_FAN_BMP_X(1), position_degrees_image_degrees(6) - (FONT_DESCENT) + 2, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
+    epaper.drawXBitmap(STATUS_FAN_BMP_X(1), STATUS_FAN_BMP_Y, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
     #if DO_DRAW_FAN1
       lcd_put_u8str(STATUS_FAN_TEXT_X(1) - 7, position_degrees_image_degrees(7), "1");
     #endif
   #endif
   #if DO_DRAW_FAN1
-    epaper.drawXBitmap(STATUS_FAN_BMP_X(2), position_degrees_image_degrees(6) - (FONT_DESCENT) + 2, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
+    epaper.drawXBitmap(STATUS_FAN_BMP_X(2), STATUS_FAN_BMP_Y, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
     lcd_put_u8str(STATUS_FAN_TEXT_X(2) - 7, position_degrees_image_degrees(7), "2");
   #endif
   #if DO_DRAW_FAN2
-    epaper.drawXBitmap(STATUS_FAN_BMP_X(3), position_degrees_image_degrees(6) - (FONT_DESCENT) + 2, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
+    epaper.drawXBitmap(STATUS_FAN_BMP_X(3), STATUS_FAN_BMP_Y, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
     lcd_put_u8str(STATUS_FAN_TEXT_X(3) - 7, position_degrees_image_degrees(7), "3");
   #endif
   #if DO_DRAW_FAN3
-    epaper.drawXBitmap(STATUS_FAN_BMP_X(4), position_degrees_image_degrees(6) - (FONT_DESCENT) + 2, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
+    epaper.drawXBitmap(STATUS_FAN_BMP_X(4), STATUS_FAN_BMP_Y, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
     lcd_put_u8str(STATUS_FAN_TEXT_X(4) - 7, position_degrees_image_degrees(7), "4");
   #endif
   #if DO_DRAW_FAN4
-    epaper.drawXBitmap(STATUS_FAN_BMP_X(5), position_degrees_image_degrees(6) - (FONT_DESCENT) + 2, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
+    epaper.drawXBitmap(STATUS_FAN_BMP_X(5), STATUS_FAN_BMP_Y, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
     lcd_put_u8str(STATUS_FAN_TEXT_X(5) - 7, position_degrees_image_degrees(7), "5");
   #endif
   #if DO_DRAW_FAN5
-    epaper.drawXBitmap(STATUS_FAN_BMP_X(6), position_degrees_image_degrees(6) - (FONT_DESCENT) + 2, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
+    epaper.drawXBitmap(STATUS_FAN_BMP_X(6), STATUS_FAN_BMP_Y, fan_image, FAN_WIDTH, FAN_HEIGHT, GxEPD_BLACK);
     lcd_put_u8str(STATUS_FAN_TEXT_X(6) - 7, position_degrees_image_degrees(7), "6");
   #endif
 
@@ -376,78 +345,70 @@ void MarlinUI::draw_status_screen() {
     total_cycles += TCNT5;
   #endif*/
 
-  /*#if ENABLED(SDSUPPORT)
+  #if ENABLED(SDSUPPORT)
+    #define SD_X ((LCD_PIXEL_WIDTH) - 128 - 54)
+    #define SD_Y ((EXTRAS_BASELINE) - FONT_ASCENT)
     //
     // SD Card Symbol
     //
-    if (card.isFileOpen() && PAGE_CONTAINS(42, 51)) {
+    if (!card.isFileOpen()) {
       // Upper box
-      u8g.drawBox(42, 42, 8, 7);     // 42-48 (or 41-47)
+      epaper.fillRect( (SD_X) + 42, (SD_Y) + 2 /*142*/, 8, 7, GxEPD_BLACK);     // 42-48 (or 41-47)
       // Right edge
-      u8g.drawBox(50, 44, 2, 5);     // 44-48 (or 43-47)
+      epaper.fillRect( (SD_X) + 50, (SD_Y) + 4/*144*/, 2, 5, GxEPD_BLACK);     // 44-48 (or 43-47)
       // Bottom hollow box
-      u8g.drawFrame(42, 49, 10, 4);  // 49-52 (or 48-51)
+      epaper.drawRect( (SD_X) + 42, (SD_Y) + 9/*149*/, 10, 4, GxEPD_BLACK);  // 49-52 (or 48-51)
       // Corner pixel
-      u8g.drawPixel(50, 43);         // 43 (or 42)
+      epaper.drawPixel((SD_X) + 50, (SD_Y) + 3/*143*/, GxEPD_BLACK);         // 43 (or 42)
     }
-  #endif // SDSUPPORT*/
+  #endif // SDSUPPORT
 
-  /*#if HAS_PRINT_PROGRESS
+  #if HAS_PRINT_PROGRESS
     //
     // Progress bar frame
     //
     #define PROGRESS_BAR_X 54
-    #define PROGRESS_BAR_WIDTH (LCD_PIXEL_WIDTH - PROGRESS_BAR_X)
+    #define PROGRESS_BAR_WIDTH 128 // (LCD_PIXEL_WIDTH - PROGRESS_BAR_X)
 
-    if (PAGE_CONTAINS(49, 52))
-      u8g.drawFrame(PROGRESS_BAR_X, 49, PROGRESS_BAR_WIDTH, 4);
+    epaper.drawRect((LCD_PIXEL_WIDTH) - (PROGRESS_BAR_WIDTH), (EXTRAS_BASELINE), PROGRESS_BAR_WIDTH, 4, GxEPD_BLACK);
 
-    const uint8_t progress = get_progress();
-
+    const uint8_t progress = 100; //get_progress();
     if (progress > 1) {
 
       //
       // Progress bar solid part
       //
-
-      if (PAGE_CONTAINS(50, 51))     // 50-51 (or just 50)
-        u8g.drawBox(
-          PROGRESS_BAR_X + 1, 50,
-          (uint16_t)((PROGRESS_BAR_WIDTH - 2) * progress * 0.01), 2
-        );
+      epaper.fillRect(
+        (LCD_PIXEL_WIDTH) - (PROGRESS_BAR_WIDTH), (EXTRAS_BASELINE) + 1,
+        (uint16_t)((PROGRESS_BAR_WIDTH - 2) * progress * 0.01), 2, GxEPD_BLACK
+      );
 
       //
       // SD Percent Complete
       //
-
       #if ENABLED(DOGM_SD_PERCENT)
-        if (PAGE_CONTAINS(41, 48)) {
-          // Percent complete
-          lcd_put_u8str(55, 48, ui8tostr3(progress));
-          lcd_put_wchar('%');
-        }
+        lcd_put_u8str((LCD_PIXEL_WIDTH) - (PROGRESS_BAR_WIDTH), (EXTRAS_BASELINE) - 1, ui8tostr3(progress));
+        lcd_put_wchar('%');
       #endif
     }
 
     //
     // Elapsed Time
     //
-
     #if DISABLED(DOGM_SD_PERCENT)
-      #define SD_DURATION_X (PROGRESS_BAR_X + (PROGRESS_BAR_WIDTH / 2) - len * (MENU_FONT_WIDTH / 2))
+                            // 54 + (128 / 2) - len * (9 / 2)
+      #define SD_DURATION_X (LCD_PIXEL_WIDTH - (FONT_WIDTH * len))
     #else
       #define SD_DURATION_X (LCD_PIXEL_WIDTH - len * MENU_FONT_WIDTH)
     #endif
 
-    if (PAGE_CONTAINS(EXTRAS_BASELINE - INFO_FONT_ASCENT, EXTRAS_BASELINE - 1)) {
-      char buffer[13];
-      duration_t elapsed = print_job_timer.duration();
-      bool has_days = (elapsed.value >= 60*60*24L);
-      uint8_t len = elapsed.toDigital(buffer, has_days);
-      lcd_put_u8str(SD_DURATION_X, EXTRAS_BASELINE, buffer);
-    }
+    char buffer[13];
+    duration_t elapsed = millis(); //print_job_timer.duration();
+    bool has_days = (elapsed.value >= 60*60*24L);
+    uint8_t len = elapsed.toDigital(buffer, has_days);
+    lcd_put_u8str(SD_DURATION_X, (EXTRAS_BASELINE) - 1, buffer);
 
-  #endif // HAS_PRINT_PROGRESS*/
+  #endif // HAS_PRINT_PROGRESS
 
   //
   // XYZ Coordinates
@@ -512,113 +473,45 @@ void MarlinUI::draw_status_screen() {
   //
   #define EXTRAS_2_BASELINE (EXTRAS_BASELINE + 3)
 
-  /*//if (PAGE_CONTAINS(EXTRAS_2_BASELINE - INFO_FONT_ASCENT, EXTRAS_2_BASELINE - 1)) {
-    //set_font(FONT_MENU);*/
-    lcd_put_u8str_P((X_LABEL_POS) + (XYZF_SPACING) * 3, (FONT_HEIGHT) - (FONT_DESCENT), "FR");
-    lcd_put_u8str((X_VALUE_POS) + (XYZF_SPACING) * 3 + (FONT_WIDTH), (FONT_HEIGHT) - (FONT_DESCENT), i16tostr3(feedrate_percentage));
-    lcd_put_wchar('%');
-    /*
-    //set_font(FONT_STATUSMENU);
-    lcd_put_u8str(12, EXTRAS_2_BASELINE, i16tostr3(feedrate_percentage));
-    lcd_put_wchar('%');
+  lcd_put_u8str_P((X_LABEL_POS) + (XYZF_SPACING) * 3, (FONT_HEIGHT) - (FONT_DESCENT), "FR");
+  lcd_put_u8str((X_VALUE_POS) + (XYZF_SPACING) * 3 + (FONT_WIDTH), (FONT_HEIGHT) - (FONT_DESCENT), i16tostr3(feedrate_percentage));
+  lcd_put_wchar('%');
 
-    //
-    // Filament sensor display if SD is disabled
-    //
-    #if ENABLED(FILAMENT_LCD_DISPLAY) && DISABLED(SDSUPPORT)
-      lcd_put_u8str(56, EXTRAS_2_BASELINE, wstring);
-      lcd_put_u8str(102, EXTRAS_2_BASELINE, mstring);
-      lcd_put_wchar('%');
-      //set_font(FONT_MENU);
-      lcd_put_wchar(47, EXTRAS_2_BASELINE, LCD_STR_FILAM_DIA[0]); // lcd_put_u8str_P(PSTR(LCD_STR_FILAM_DIA));
-      lcd_put_wchar(93, EXTRAS_2_BASELINE, LCD_STR_FILAM_MUL[0]);
-    #endif
-  //}*/
+  //
+  // Filament sensor display if SD is disabled
+  //
+  #if ENABLED(FILAMENT_LCD_DISPLAY) && DISABLED(SDSUPPORT)
+    lcd_put_u8str(56, EXTRAS_2_BASELINE, wstring);
+    lcd_put_u8str(102, EXTRAS_2_BASELINE, mstring);
+    lcd_put_wchar('%');
+    //set_font(FONT_MENU);
+    lcd_put_wchar(47, EXTRAS_2_BASELINE, LCD_STR_FILAM_DIA[0]); // lcd_put_u8str_P(PSTR(LCD_STR_FILAM_DIA));
+    lcd_put_wchar(93, EXTRAS_2_BASELINE, LCD_STR_FILAM_MUL[0]);
+  #endif
 
   //
   // Status line
   //
-  //if (PAGE_CONTAINS(STATUS_BASELINE - INFO_FONT_ASCENT, STATUS_BASELINE + INFO_FONT_DESCENT)) {
-    lcd_moveto(0, STATUS_BASELINE);
+  lcd_moveto(0, STATUS_BASELINE);
 
-    #if BOTH(FILAMENT_LCD_DISPLAY, SDSUPPORT)
-      // Alternate Status message and Filament display
-      if (ELAPSED(millis(), next_filament_display)) {
-        lcd_put_u8str_P(PSTR(LCD_STR_FILAM_DIA));
-        lcd_put_wchar(':');
-        lcd_put_u8str(wstring);
-        lcd_put_u8str_P(PSTR("  " LCD_STR_FILAM_MUL));
-        lcd_put_wchar(':');
-        lcd_put_u8str(mstring);
-        lcd_put_wchar('%');
-      }
-      else
-    #endif
-        draw_status_message(blink);
-  //}
+  #if BOTH(FILAMENT_LCD_DISPLAY, SDSUPPORT)
+    // Alternate Status message and Filament display
+    if (ELAPSED(millis(), next_filament_display)) {
+      lcd_put_u8str_P(PSTR(LCD_STR_FILAM_DIA));
+      lcd_put_wchar(':');
+      lcd_put_u8str(wstring);
+      lcd_put_u8str_P(PSTR("  " LCD_STR_FILAM_MUL));
+      lcd_put_wchar(':');
+      lcd_put_u8str(mstring);
+      lcd_put_wchar('%');
+    }
+    else
+  #endif
+      draw_status_message(blink);
 }
 
 void MarlinUI::draw_status_message(const bool blink) {
-
-  /*#if ENABLED(MARLIN_DEV_MODE)
-    if (PAGE_CONTAINS(64-8, 64-1)) {
-      lcd_put_int(total_cycles);
-      lcd_put_wchar('/');
-      lcd_put_int(count_renders);
-      lcd_put_wchar('=');
-      lcd_put_int(int(total_cycles / count_renders));
-      return;
-    }
-  #endif*/
-
-  // Get the UTF8 character count of the string
-  uint8_t slen = utf8_strlen(status_message);
-
-  #if ENABLED(STATUS_MESSAGE_SCROLLING)
-
-    static bool last_blink = false;
-
-    if (slen <= LCD_WIDTH) {
-      // The string fits within the line. Print with no scrolling
-      lcd_put_u8str(status_message);
-      while (slen < LCD_WIDTH) { lcd_put_wchar(' '); ++slen; }
-    }
-    else {
-      // String is longer than the available space
-
-      // Get a pointer to the next valid UTF8 character
-      // and the string remaining length
-      uint8_t rlen;
-      const char *stat = status_and_len(rlen);
-      lcd_put_u8str_max(stat, LCD_PIXEL_WIDTH);
-
-      // If the remaining string doesn't completely fill the screen
-      if (rlen < LCD_WIDTH) {
-        lcd_put_wchar('.');                     // Always at 1+ spaces left, draw a dot
-        uint8_t chars = LCD_WIDTH - rlen;       // Amount of space left in characters
-        if (--chars) {                          // Draw a second dot if there's space
-          lcd_put_wchar('.');
-          if (--chars) {                        // Print a second copy of the message
-            lcd_put_u8str_max(status_message, LCD_PIXEL_WIDTH - (rlen + 2) * (MENU_FONT_WIDTH));
-            lcd_put_wchar(' ');
-          }
-        }
-      }
-      if (last_blink != blink) {
-        last_blink = blink;
-        advance_status_scroll();
-      }
-    }
-
-  #else // !STATUS_MESSAGE_SCROLLING
-
-    // Just print the string to the LCD
-    lcd_put_u8str_max(status_message, LCD_PIXEL_WIDTH);
-
-    // Fill the rest with spaces
-    for (; slen < LCD_WIDTH; ++slen) lcd_put_wchar(' ');
-
-  #endif // !STATUS_MESSAGE_SCROLLING
+  lcd_put_u8str(status_message); // Just print the string to the LCD
 }
 
 #endif // HAS_GRAPHICAL_LCD && !LIGHTWEIGHT_UI && !DOGLCD
