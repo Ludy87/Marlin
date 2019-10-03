@@ -42,8 +42,6 @@ auto position_degrees_image_degrees = [&](const uint8_t i) {
 
 #define POSITION_8 (LCD_PIXEL_WIDTH) / 8
 
-#define STATUS_HEATERS_XSPACE 25
-
 #define STATUS_HEATER_BMP_X(I)  (POSITION_8) * I - ((POSITION_8) + (HEATER_BMPWIDTH)) / 2
 #define STATUS_HEATER_TEXT_X(I) STATUS_HEATER_BMP_X(I) + (FONT_WIDTH)
 
@@ -98,10 +96,24 @@ auto position_degrees_image_degrees = [&](const uint8_t i) {
 #define STATUS_CHAMBER_BMP_X  (LCD_PIXEL_WIDTH) - ((POSITION_8) + (CHAMBER_BMPWIDTH)) / 2
 #define STATUS_CHAMBER_TEXT_X (STATUS_CHAMBER_BMP_X) + (FONT_WIDTH)
 
-#define STATUS_BED_BMP_X (LCD_PIXEL_WIDTH) - (POSITION_8) - ((POSITION_8) + (BED_BMPWIDTH)) / 2
-#define STATUS_BED_TEXT_X (LCD_PIXEL_WIDTH) - (POSITION_8) - ((POSITION_8) + (BED_BMPWIDTH)) / 2 + (FONT_WIDTH)
-
-#define STATUS_FAN_XSPACE 19
+#define STATUS_BED_BMP_X  (LCD_PIXEL_WIDTH) - (POSITION_8) - ((POSITION_8) + (BED_BMPWIDTH)) / 2
+#define STATUS_BED_TEXT_X (STATUS_BED_BMP_X) + (FONT_WIDTH)
 
 #define STATUS_FAN_BMP_X(I)  (POSITION_8) * I - ((POSITION_8) + (FAN_WIDTH)) / 2
+#define STATUS_FAN_BMP_Y     position_degrees_image_degrees(6) - (FONT_DESCENT) + 2
 #define STATUS_FAN_TEXT_X(I) STATUS_FAN_BMP_X(I)
+
+#if ENABLED(CUSTOM_STATUS_SCREEN_IMAGE)
+
+  #include "../../../_Statusscreen.h"
+  #ifndef STATUS_LOGO_HEIGHT
+    #define STATUS_LOGO_BYTEWIDTH CEILING(STATUS_LOGO_WIDTH, 8)
+    #define STATUS_LOGO_HEIGHT     (sizeof(status_logo_bmp) / (STATUS_LOGO_BYTEWIDTH))
+  #endif
+  #define STATUS_LOGO_X (LCD_PIXEL_WIDTH) - (STATUS_LOGO_WIDTH)
+  #define STATUS_LOGO_Y position_degrees_image_degrees(6)
+
+  #ifdef STATUS_SCREENWIDTH
+    #error "Your custom _Statusscreen.h needs to be converted for Marlin 2.0."
+  #endif
+#endif

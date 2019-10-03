@@ -163,3 +163,4 @@ void MarlinUI::clear_lcd() {
   epaper.clearScreen();
 } // Automatically cleared by Picture Loop
 
+bool MarlinUI::detected() { return true; }
