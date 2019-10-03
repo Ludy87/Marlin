@@ -115,8 +115,6 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
     #define IFBED(A,B) (B)
   #endif
 
-  const bool isHeat = false;
-
   #if ENABLED(MARLIN_DEV_MODE)
     const float temp = 20 + (millis() >> 8) % IFBED(100, 200),
               target = IFBED(100, 200);
@@ -126,11 +124,9 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
   #endif
 
   #define STATIC_HOTEND true
-  #define HOTEND_DOT    isHeat
 
   #if DO_DRAW_BED
     #define STATIC_BED  true
-    #define BED_DOT     isHeat
   #else
     #define STATIC_BED  false
     #define BED_DOT     false
