@@ -75,3 +75,6 @@ inline int lcd_put_wchar(const wchar_t c) { return lcd_put_wchar_max(c, PIXEL_LE
 inline int lcd_put_wchar(const lcd_uint_t col, const lcd_uint_t row, const wchar_t c) { lcd_moveto(col, row); return lcd_put_wchar(c); }
 
 void lcd_put_axis(lcd_uint_t col, lcd_uint_t row, const AxisEnum axis);
+
+void lcd_drawXBitmap(uint16_t x, uint16_t y, const uint8_t bitmap[], uint16_t w, uint16_t h);
+void lcd_drawBitmap(uint16_t x, uint16_t y, const uint8_t bitmap[], uint16_t w, uint16_t h);

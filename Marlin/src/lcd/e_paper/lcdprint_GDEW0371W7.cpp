@@ -41,7 +41,7 @@ void lcd_moveto(const lcd_uint_t col, const lcd_uint_t row) {
 void lcd_put_int(const int i) { u8g2_gfx.print(i); }
 
 int lcd_put_wchar_max(const wchar_t c, pixel_len_t max_length) {
-    if (c < 256) {
+  if (c < 256) {
     u8g2_gfx.print((char)c);
     return 1;
   }
@@ -72,6 +72,30 @@ void lcd_put_axis(lcd_uint_t col, lcd_uint_t row, const AxisEnum axis) {
   const char a = 'X' + axis;
   u8g2_gfx.setCursor(col, row);
   u8g2_gfx.print( a );
+}
+
+void _lcd_drawXBitmap(uint16_t x, uint16_t y, const uint8_t bitmap[], uint16_t w, uint16_t h, uint16_t c=GxEPD_BLACK) {
+  epaper.drawXBitmap(x, y, bitmap, w, h, c);
+}
+
+void lcd_drawXBitmap(uint16_t x, uint16_t y, const uint8_t bitmap[], uint16_t w, uint16_t h) {
+  _lcd_drawXBitmap(x, y, bitmap, w, h);
+}
+
+void _lcd_drawBitmap(uint16_t x, uint16_t y, const uint8_t bitmap[], uint16_t w, uint16_t h, uint16_t c=GxEPD_BLACK) {
+  epaper.drawBitmap(x, y, bitmap, w, h, c);
+}
+
+void lcd_drawBitmap(uint16_t x, uint16_t y, const uint8_t bitmap[], uint16_t w, uint16_t h) {
+  _lcd_drawBitmap(x, y, bitmap, w, h);
+}
+
+void _lcd_drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w, int16_t h, uint16_t c=GxEPD_BLACK) {
+  epaper.drawBitmap(x, y, bitmap, w, h, c);
+}
+
+void lcd_drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w, int16_t h, uint16_t color) {
+  _lcd_drawBitmap(x, y, bitmap, w, h);
 }
 
 #endif
