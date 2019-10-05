@@ -25,7 +25,6 @@
 
 #ifndef EPAPER_CLASS
   #include "epd/GxEPD2_BW.h"
-//  #include <U8g2_for_Adafruit_GFX.h>
   #include "libs/U8g2_for_Adafruit_GFX/src/U8g2_for_Adafruit_GFX.h"
   #define MAX_DISPAY_BUFFER_SIZE 800
   #define MAX_HEIGHT(EPD) (EPD::HEIGHT <= MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8) ? EPD::HEIGHT : MAX_DISPAY_BUFFER_SIZE / (EPD::WIDTH / 8))
@@ -40,16 +39,16 @@
 
 #ifndef LCD_PIXEL_WIDTH
   #if ENABLED(E_SCREEN_ROT_90) || ENABLED(E_SCREEN_ROT_270)
-    #define LCD_PIXEL_WIDTH GxEPD2_371::HEIGHT
+    #define LCD_PIXEL_WIDTH 416
   #else
-    #define LCD_PIXEL_WIDTH GxEPD2_371::WIDTH
+    #define LCD_PIXEL_WIDTH 240
   #endif
 #endif
 #ifndef LCD_PIXEL_HEIGHT
   #if ENABLED(E_SCREEN_ROT_90) || ENABLED(E_SCREEN_ROT_270)
-    #define LCD_PIXEL_HEIGHT GxEPD2_371::WIDTH
+    #define LCD_PIXEL_HEIGHT 240
   #else
-    #define LCD_PIXEL_HEIGHT GxEPD2_371::HEIGHT
+    #define LCD_PIXEL_HEIGHT 416
   #endif
 #endif
 
