@@ -29,8 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _GxEPD2_371_H_
-#define _GxEPD2_371_H_
+#pragma once
 
 #include "../GxEPD2_EPD.h"
 
@@ -99,5 +98,3 @@ class GxEPD2_371 : public GxEPD2_EPD
     static const unsigned char lut_24_LUTKK_partial[];
     static const unsigned char lut_25_LUTBD_partial[];
 };
-
-#endif
