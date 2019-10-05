@@ -36,13 +36,15 @@
 #include "epd/chamber.h"
 #include "epd/heaters.h"
 
-auto position_degrees_image_degrees = [&](const uint8_t i) {
+/*auto position_degrees_image_degrees = [&](const uint8_t i) {
   return (FONT_HEIGHT) * i + (FONT_ASCENT) - (FONT_DESCENT);
-};
+};*/
 
-#define POSITION_8 (LCD_PIXEL_WIDTH) / 8
+#define POS_DEG_BMP_DEG(I) (FONT_HEIGHT) * (I) + (FONT_ASCENT) - (FONT_DESCENT)
 
-#define STATUS_HEATER_BMP_X(I)  (POSITION_8) * I - ((POSITION_8) + (HEATER_BMPWIDTH)) / 2
+#define POS_8 (LCD_PIXEL_WIDTH) / 8
+
+#define STATUS_HEATER_BMP_X(I)  (POS_8) * I - ((POS_8) + (HEATER_BMPWIDTH)) / 2
 #define STATUS_HEATER_TEXT_X(I) STATUS_HEATER_BMP_X(I) + (FONT_WIDTH)
 
 #ifndef STATUS_HOTEND1_TEXT_X
@@ -87,25 +89,28 @@ auto position_degrees_image_degrees = [&](const uint8_t i) {
   #define STATUS_HOTEND_X(N) status_hotend_x[N]
 #endif
 
-#define STATUS_CHAMBER_BMP_X  (LCD_PIXEL_WIDTH) - ((POSITION_8) + (CHAMBER_BMPWIDTH)) / 2
+#define STATUS_CHAMBER_BMP_X  (LCD_PIXEL_WIDTH) - ((POS_8) + (CHAMBER_BMP_WIDTH)) / 2
 #define STATUS_CHAMBER_TEXT_X (STATUS_CHAMBER_BMP_X) + (FONT_WIDTH)
 
-#define STATUS_BED_BMP_X  (LCD_PIXEL_WIDTH) - (POSITION_8) - ((POSITION_8) + (BED_BMPWIDTH)) / 2
-#define STATUS_BED_TEXT_X (STATUS_BED_BMP_X) + (FONT_WIDTH)
+#define STATUS_BED_BMP_X      (LCD_PIXEL_WIDTH) - (POS_8) - ((POS_8) + (BED_BMPWIDTH)) / 2
+#define STATUS_BED_TEXT_X     (STATUS_BED_BMP_X) + (FONT_WIDTH)
 
-#define STATUS_FAN_BMP_X(I)  (POSITION_8) * I - ((POSITION_8) + (FAN_WIDTH)) / 2
-#define STATUS_FAN_BMP_Y     position_degrees_image_degrees(6) - (FONT_DESCENT) + 2
-#define STATUS_FAN_TEXT_X(I) STATUS_FAN_BMP_X(I)
+#define STATUS_FAN_BMP_X(I)   (POS_8) * (I) - ((POS_8) + (FAN_WIDTH)) / 2
+#define STATUS_FAN_BMP_Y      POS_DEG_BMP_DEG(6) - (FONT_DESCENT) + 2
+#define STATUS_FAN_TEXT_X(I)  STATUS_FAN_BMP_X(I)
+#define STATUS_FAN_TEXT_Y     POS_DEG_BMP_DEG(7)
 
 #if ENABLED(CUSTOM_STATUS_SCREEN_IMAGE)
 
   #include "../../../_Statusscreen.h"
   #ifndef STATUS_LOGO_HEIGHT
     #define STATUS_LOGO_BYTEWIDTH CEILING(STATUS_LOGO_WIDTH, 8)
-    #define STATUS_LOGO_HEIGHT     (sizeof(status_logo_bmp) / (STATUS_LOGO_BYTEWIDTH))
+    #define STATUS_LOGO_HEIGHT    (sizeof(status_logo_bmp) / (STATUS_LOGO_BYTEWIDTH))
   #endif
-  #define STATUS_LOGO_X (LCD_PIXEL_WIDTH) - (STATUS_LOGO_WIDTH)
-  #define STATUS_LOGO_Y position_degrees_image_degrees(6)
+  #define STATUS_LOGO_X ((LCD_PIXEL_WIDTH) - (STATUS_LOGO_WIDTH))
+  #undef  STATUS_LOGO_Y
+  #define _STATUS_LOGO_Y POS_DEG_BMP_DEG(6) + (FONT_DESCENT) - 1
+  #define STATUS_LOGO_Y (_STATUS_LOGO_Y) + ((LCD_PIXEL_HEIGHT) - (_STATUS_LOGO_Y) - (STATUS_LOGO_HEIGHT) - 65) / 2
 
   #ifdef STATUS_SCREENWIDTH
     #error "Your custom _Statusscreen.h needs to be converted for Marlin 2.0."
