@@ -34,9 +34,7 @@
 #include "../fontutils.h"
 #include "../lcdprint.h"
 
-void lcd_moveto(const lcd_uint_t col, const lcd_uint_t row) {
-  u8g2_gfx.setCursor(col, row);
-}
+void lcd_moveto(const lcd_uint_t col, const lcd_uint_t row) { u8g2_gfx.setCursor(col, row); }
 
 void lcd_put_int(const int i) { u8g2_gfx.print(i); }
 
@@ -60,12 +58,7 @@ int lcd_put_u8str_max(const char * utf8_str, pixel_len_t max_length) {
 }
 
 int lcd_put_u8str_max_P(PGM_P utf8_str_P, pixel_len_t max_length) {
-  uint16_t x = u8g2_gfx.getCursorX(),  // 66 - 34
-           y = u8g2_gfx.getCursorY(),  // 45 - 60
-         ret = u8g2_gfx.getUTF8Width(utf8_str_P); // 107 - 170
-  u8g2_gfx.setCursor(x, y);
-  u8g2_gfx.print(utf8_str_P);
-  return ret;
+  return lcd_put_u8str_max(utf8_str_P, max_length);
 }
 
 void lcd_put_axis(lcd_uint_t col, lcd_uint_t row, const AxisEnum axis) {
@@ -87,14 +80,6 @@ void _lcd_drawBitmap(uint16_t x, uint16_t y, const uint8_t bitmap[], uint16_t w,
 }
 
 void lcd_drawBitmap(uint16_t x, uint16_t y, const uint8_t bitmap[], uint16_t w, uint16_t h) {
-  _lcd_drawBitmap(x, y, bitmap, w, h);
-}
-
-void _lcd_drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w, int16_t h, uint16_t c=GxEPD_BLACK) {
-  epaper.drawBitmap(x, y, bitmap, w, h, c);
-}
-
-void lcd_drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w, int16_t h, uint16_t color) {
   _lcd_drawBitmap(x, y, bitmap, w, h);
 }
 

@@ -82,10 +82,10 @@ void MarlinUI::draw_marlin_bootscreen(const bool line2/*=false*/) {
     NOLESS(offy, uint16_t(0));
 
     auto _draw_bootscreen_bmp = [&](const uint8_t *bitmap) {
-      epaper.drawXBitmap(0, 0, marlin_old_250_bits, marlin_old_250_width, MARLIN_BMP_HEIGHT, GxEPD_BLACK);
+      lcd_drawXBitmap(0, 0, marlin_old_250_bits, marlin_old_250_width, MARLIN_BMP_HEIGHT);
       if (!two_part || !line2) lcd_put_u8str_P(txt_offx_1, txt_base - (FONT_HEIGHT), SHORT_BUILD_VERSION);
       if (!two_part || line2) lcd_put_u8str_P(txt_offx_2, txt_base, MARLIN_WEBSITE_URL);
-      epaper.drawXBitmap(offx, MARLIN_BMP_HEIGHT + 5, marlin_banner, MRLIN_BANNER_WIDTH, MRLIN_BANNER_HEIGHT, GxEPD_BLACK);
+      lcd_drawXBitmap(offx, MARLIN_BMP_HEIGHT + 5, marlin_banner, MRLIN_BANNER_WIDTH, MRLIN_BANNER_HEIGHT);
       lcd_put_u8str_P(0, (MARLIN_BMP_HEIGHT) + (MRLIN_BANNER_HEIGHT) + (FONT_HEIGHT)    , "» Scott Lahteine    [@thinkyhead] - USA");
       lcd_put_u8str_P(0, (MARLIN_BMP_HEIGHT) + (MRLIN_BANNER_HEIGHT) + (FONT_HEIGHT) * 2, "» Roxanne Neufeld   [@Roxy-3D] - USA");
       lcd_put_u8str_P(0, (MARLIN_BMP_HEIGHT) + (MRLIN_BANNER_HEIGHT) + (FONT_HEIGHT) * 3, "» Bob Kuhn          [@Bob-the-Kuhn] - USA");
