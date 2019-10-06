@@ -479,7 +479,8 @@ class Temperature {
       #if ENABLED(ADAPTIVE_FAN_SLOWING)
         static uint8_t fan_speed_scaler[FAN_COUNT];
       #else
-        static constexpr uint8_t fan_speed_scaler[FAN_COUNT] = ARRAY_N(FAN_COUNT, 128, 128, 128, 128, 128, 128);
+        //static constexpr uint8_t fan_speed_scaler[FAN_COUNT] = ARRAY_N(FAN_COUNT, 128, 128, 128, 128, 128, 128);
+        static uint8_t fan_speed_scaler[FAN_COUNT]; // = ARRAY_N(FAN_COUNT, 128, 128, 128, 128, 128, 128);
       #endif
 
       static inline uint8_t scaledFanSpeed(const uint8_t target, const uint8_t fs) {
@@ -515,6 +516,15 @@ class Temperature {
         #endif
         #if HAS_FAN2 || (ENABLED(SINGLENOZZLE) && EXTRUDERS > 2)
           FORCE_INLINE static void lcd_setFanSpeed2() { lcd_setFanSpeed(2); }
+        #endif
+        #if HAS_FAN3 || (ENABLED(SINGLENOZZLE) && EXTRUDERS > 3)
+          FORCE_INLINE static void lcd_setFanSpeed3() { lcd_setFanSpeed(3); }
+        #endif
+        #if HAS_FAN4 || (ENABLED(SINGLENOZZLE) && EXTRUDERS > 4)
+          FORCE_INLINE static void lcd_setFanSpeed4() { lcd_setFanSpeed(4); }
+        #endif
+        #if HAS_FAN5 || (ENABLED(SINGLENOZZLE) && EXTRUDERS > 5)
+          FORCE_INLINE static void lcd_setFanSpeed5() { lcd_setFanSpeed(5); }
         #endif
 
       #endif // HAS_LCD_MENU

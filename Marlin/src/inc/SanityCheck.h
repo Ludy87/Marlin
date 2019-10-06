@@ -225,8 +225,8 @@
   #error "LCD_PIN_BL is now LCD_BACKLIGHT_PIN. Please update your pins definitions."
 #elif defined(LCD_PIN_RESET)
   #error "LCD_PIN_RESET is now LCD_RESET_PIN. Please update your pins definitions."
-#elif defined(EXTRUDER_0_AUTO_FAN_PIN) || defined(EXTRUDER_1_AUTO_FAN_PIN) || defined(EXTRUDER_2_AUTO_FAN_PIN) || defined(EXTRUDER_3_AUTO_FAN_PIN)
-  #error "EXTRUDER_[0123]_AUTO_FAN_PIN is now E[0123]_AUTO_FAN_PIN. Please update your Configuration_adv.h."
+#elif defined(EXTRUDER_0_AUTO_FAN_PIN) || defined(EXTRUDER_1_AUTO_FAN_PIN) || defined(EXTRUDER_2_AUTO_FAN_PIN) || defined(EXTRUDER_3_AUTO_FAN_PIN) || defined(EXTRUDER_4_AUTO_FAN_PIN) || defined(EXTRUDER_5_AUTO_FAN_PIN)
+  #error "EXTRUDER_[012345]_AUTO_FAN_PIN is now E[012345]_AUTO_FAN_PIN. Please update your Configuration_adv.h."
 #elif defined(min_software_endstops) || defined(max_software_endstops)
   #error "(min|max)_software_endstops are now (MIN|MAX)_SOFTWARE_ENDSTOPS. Please update your configuration."
 #elif ENABLED(Z_PROBE_SLED) && defined(SLED_PIN)
@@ -1410,6 +1410,10 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
       #error "You cannot set E2_AUTO_FAN_PIN equal to FAN_PIN."
     #elif E3_AUTO_FAN_PIN == FAN_PIN
       #error "You cannot set E3_AUTO_FAN_PIN equal to FAN_PIN."
+    #elif E4_AUTO_FAN_PIN == FAN_PIN
+      #error "You cannot set E4_AUTO_FAN_PIN equal to FAN_PIN."
+    #elif E5_AUTO_FAN_PIN == FAN_PIN
+      #error "You cannot set E5_AUTO_FAN_PIN equal to FAN_PIN."
     #endif
   #endif
 #endif
@@ -1429,6 +1433,10 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
     #error "You cannot set E2_AUTO_FAN_PIN equal to CONTROLLER_FAN_PIN."
   #elif E3_AUTO_FAN_PIN == CONTROLLER_FAN_PIN
     #error "You cannot set E3_AUTO_FAN_PIN equal to CONTROLLER_FAN_PIN."
+  #elif E4_AUTO_FAN_PIN == CONTROLLER_FAN_PIN
+    #error "You cannot set E4_AUTO_FAN_PIN equal to CONTROLLER_FAN_PIN."
+  #elif E5_AUTO_FAN_PIN == CONTROLLER_FAN_PIN
+    #error "You cannot set E5_AUTO_FAN_PIN equal to CONTROLLER_FAN_PIN."
   #endif
 #endif
 
@@ -1850,6 +1858,10 @@ static_assert(Y_MAX_LENGTH >= Y_BED_SIZE, "Movement bounds (Y_MIN_POS, Y_MAX_POS
     static_assert(PWM_PIN(E2_AUTO_FAN_PIN), "E2" AF_ERR_SUFF);
   #elif HAS_AUTO_FAN_3
     static_assert(PWM_PIN(E3_AUTO_FAN_PIN), "E3" AF_ERR_SUFF);
+  #elif HAS_AUTO_FAN_4
+    static_assert(PWM_PIN(E4_AUTO_FAN_PIN), "E4" AF_ERR_SUFF);
+  #elif HAS_AUTO_FAN_5
+    static_assert(PWM_PIN(E5_AUTO_FAN_PIN), "E5" AF_ERR_SUFF);
   #endif
 #endif
 
@@ -2461,6 +2473,12 @@ static_assert(   _ARR_TEST(3,0) && _ARR_TEST(3,1) && _ARR_TEST(3,2)
       #error "SPINDLE_LASER_PWM_PIN conflicts with FAN1_PIN."
     #elif _PIN_CONFLICT(FAN2)
       #error "SPINDLE_LASER_PWM_PIN conflicts with FAN2_PIN."
+    #elif _PIN_CONFLICT(FAN3)
+      #error "SPINDLE_LASER_PWM_PIN conflicts with FAN3_PIN."
+    #elif _PIN_CONFLICT(FAN4)
+      #error "SPINDLE_LASER_PWM_PIN conflicts with FAN4_PIN."
+    #elif _PIN_CONFLICT(FAN5)
+      #error "SPINDLE_LASER_PWM_PIN conflicts with FAN5_PIN."
     #elif _PIN_CONFLICT(CONTROLLERFAN)
       #error "SPINDLE_LASER_PWM_PIN conflicts with CONTROLLERFAN_PIN."
     #elif _PIN_CONFLICT(MOTOR_CURRENT_PWM_XY)

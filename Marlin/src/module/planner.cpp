@@ -1289,6 +1289,15 @@ void Planner::check_axes_activity() {
     #if HAS_FAN2
       FAN_SET(2);
     #endif
+    #if HAS_FAN3
+      FAN_SET(3);
+    #endif
+    #if HAS_FAN4
+      FAN_SET(4);
+    #endif
+    #if HAS_FAN5
+      FAN_SET(5);
+    #endif
 
   #endif // FAN_COUNT > 0
 
