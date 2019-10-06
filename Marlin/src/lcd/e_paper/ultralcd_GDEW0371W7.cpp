@@ -44,8 +44,6 @@ U8G2_ADAFRUIT_GFX_CLASS u8g2_gfx;
 #define MARLIN_BMP_BYTEWIDTH CEILING(marlin_old_250_width, 8)
 #define MARLIN_BMP_HEIGHT (sizeof(marlin_old_250_bits) / (MARLIN_BMP_BYTEWIDTH))
 
-//#define marlin_old_250_height 79
-
 constexpr bool two_part = ((LCD_PIXEL_HEIGHT) - (MARLIN_BMP_HEIGHT)) < ((FONT_ASCENT) * 2);
 
 void MarlinUI::draw_marlin_bootscreen(const bool line2/*=false*/) {
@@ -81,17 +79,23 @@ void MarlinUI::draw_marlin_bootscreen(const bool line2/*=false*/) {
     NOLESS(offx, uint16_t(0));
     NOLESS(offy, uint16_t(0));
 
+    #define MRLIN_BANNER_WIDTH 416
+    #define MRLIN_BANNER_HEIGHT 42
+    #define MARLIN_BMP_Y (MARLIN_BMP_HEIGHT) + (MRLIN_BANNER_HEIGHT) + (FONT_HEIGHT)
+
+    const char * credit[] = {
+      "» Scott Lahteine    [@thinkyhead] - USA", "» Roxanne Neufeld   [@Roxy-3D] - USA",
+      "» Bob Kuhn          [@Bob-the-Kuhn] - USA", "» Chris Pepper      [@p3p] - UK",
+      "» João Brazio       [@jbrazio] - Portugal", "» Erik van der Zalm [@ErikZalm] - Netherlands" };
+
     auto _draw_bootscreen_bmp = [&](const uint8_t *bitmap) {
       lcd_drawXBitmap(0, 0, marlin_old_250_bits, marlin_old_250_width, MARLIN_BMP_HEIGHT);
-      if (!two_part || !line2) lcd_put_u8str_P(txt_offx_1, txt_base - (FONT_HEIGHT), SHORT_BUILD_VERSION);
-      if (!two_part || line2) lcd_put_u8str_P(txt_offx_2, txt_base, MARLIN_WEBSITE_URL);
+      if (!two_part || !line2) lcd_put_u8str(txt_offx_1, txt_base - (FONT_HEIGHT), SHORT_BUILD_VERSION);
+      if (!two_part ||  line2) lcd_put_u8str(txt_offx_2, txt_base, MARLIN_WEBSITE_URL);
       lcd_drawXBitmap(offx, MARLIN_BMP_HEIGHT + 5, marlin_banner, MRLIN_BANNER_WIDTH, MRLIN_BANNER_HEIGHT);
-      lcd_put_u8str_P(0, (MARLIN_BMP_HEIGHT) + (MRLIN_BANNER_HEIGHT) + (FONT_HEIGHT)    , "» Scott Lahteine    [@thinkyhead] - USA");
-      lcd_put_u8str_P(0, (MARLIN_BMP_HEIGHT) + (MRLIN_BANNER_HEIGHT) + (FONT_HEIGHT) * 2, "» Roxanne Neufeld   [@Roxy-3D] - USA");
-      lcd_put_u8str_P(0, (MARLIN_BMP_HEIGHT) + (MRLIN_BANNER_HEIGHT) + (FONT_HEIGHT) * 3, "» Bob Kuhn          [@Bob-the-Kuhn] - USA");
-      lcd_put_u8str_P(0, (MARLIN_BMP_HEIGHT) + (MRLIN_BANNER_HEIGHT) + (FONT_HEIGHT) * 4, "» Chris Pepper      [@p3p] - UK");
-      lcd_put_u8str_P(0, (MARLIN_BMP_HEIGHT) + (MRLIN_BANNER_HEIGHT) + (FONT_HEIGHT) * 5, "» João Brazio       [@jbrazio] - Portugal");
-      lcd_put_u8str_P(0, (MARLIN_BMP_HEIGHT) + (MRLIN_BANNER_HEIGHT) + (FONT_HEIGHT) * 6, "» Erik van der Zalm [@ErikZalm] - Netherlands");
+      for (uint8_t i = 0; i < COUNT(credit); i++) {
+        lcd_put_u8str(0, MARLIN_BMP_Y * (i + 1), credit[i]);
+      }
     };
 
     auto draw_bootscreen_bmp = [&](const uint8_t *bitmap) {
@@ -152,10 +156,9 @@ void MarlinUI::draw_kill_screen() {
   const lcd_uint_t h4 = epaper.height() / 4;
   epaper.firstPage();
   do {
-    //set_font(FONT_MENU);
     lcd_put_u8str(0, h4 * 1, status_message);
-    lcd_put_u8str_P(0, h4 * 2, (MSG_HALTED));
-    lcd_put_u8str_P(0, h4 * 3, (MSG_PLEASE_RESET));
+    lcd_put_u8str(0, h4 * 2, MSG_HALTED);
+    lcd_put_u8str(0, h4 * 3, MSG_PLEASE_RESET);
   } while (epaper.nextPage());
 }
 
