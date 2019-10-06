@@ -46,10 +46,10 @@ const unsigned char start_bmp[] PROGMEM = {
 
 #define START_BMP_WIDTH     112
 #define START_BMP_BYTEWIDTH CEILING(START_BMP_WIDTH, 8)
-#define START_BMPHEIGHT     (sizeof(start_bmp) / (START_BMP_BYTEWIDTH))
+#define START_BMP_HEIGHT     (sizeof(start_bmp) / (START_BMP_BYTEWIDTH))
 
-#define BED_BMPWIDTH  37 //54
-#define BED_BMPHEIGHT 36
+#define BED_BMP_WIDTH  37 //54
+#define BED_BMP_HEIGHT 36
 
 const unsigned char bitmap_bed[] PROGMEM = {
   B00000000,B00000000,B00000000,B00000000,B00000000,

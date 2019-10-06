@@ -1,7 +1,7 @@
 #include "../../../inc/MarlinConfig.h"
 
-#define HEATER_BMPWIDTH  30
-#define HEATER_BMPHEIGHT 36
+#define HEATER_BMP_WIDTH  30
+#define HEATER_BMP_HEIGHT 36
 
 #if ENABLED(HEATER_INVERT)
 
@@ -88,5 +88,5 @@
 #endif
 
 #ifndef STATUS_HEATERS_HEIGHT
-  #define STATUS_HEATERS_HEIGHT (sizeof(STATUS_HOTEND_BITMAP) / (HEATER_BMPWIDTH))
+  #define STATUS_HEATERS_HEIGHT (sizeof(STATUS_HOTEND_BITMAP) / (HEATER_BMP_WIDTH))
 #endif
