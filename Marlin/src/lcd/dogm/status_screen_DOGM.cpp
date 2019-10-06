@@ -257,7 +257,7 @@ FORCE_INLINE void _draw_heater_status(const heater_ind_t heater, const bool blin
 
   FORCE_INLINE void _draw_chamber_status(const bool blink) {
     #if ENABLED(MARLIN_DEV_MODE)
-	    const float temp = 10 + (millis() >> 8) % CHAMBER_MAXTEMP,
+      const float temp = 10 + (millis() >> 8) % CHAMBER_MAXTEMP,
                 target = CHAMBER_MAXTEMP;
     #else
       const float temp = thermalManager.degChamber();
