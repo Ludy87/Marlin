@@ -102,7 +102,7 @@ FORCE_INLINE void _draw_axis_value(const AxisEnum axis, const char *value) {
   else {
     #if NONE(HOME_AFTER_DEACTIVATE, DISABLE_REDUCED_ACCURACY_WARNING)
       if (!TEST(axis_known_position, axis))
-        lcd_put_u8str_P(axis == Z_AXIS ? "    N/A" : " N/A");
+        lcd_put_u8str(axis == Z_AXIS ? "    N/A" : " N/A");
       else
     #endif
         lcd_put_u8str(value);
