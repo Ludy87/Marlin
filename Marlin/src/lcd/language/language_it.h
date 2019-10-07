@@ -222,8 +222,8 @@
 #define MSG_NOZZLE                          _UxGT("Ugello")
 #define MSG_BED                             _UxGT("Piatto")
 #define MSG_CHAMBER                         _UxGT("Camera")
-#define MSG_FAN_SPEED                       _UxGT("Velocità ventola")
-#define MSG_EXTRA_FAN_SPEED                 _UxGT("Extra vel. ventola")
+#define MSG_FAN_SPEED                       _UxGT("Vel. ventola") // Max 15 caratteri
+#define MSG_EXTRA_FAN_SPEED                 _UxGT("Extra vel.vent.") // Max 15 caratteri
 #define MSG_FLOW                            _UxGT("Flusso")
 #define MSG_CONTROL                         _UxGT("Controllo")
 #define MSG_MIN                             LCD_STR_THERMOMETER _UxGT(" Min")
@@ -418,6 +418,8 @@
 #define MSG_INFO_EXTRUDERS                  _UxGT("Estrusori")
 #define MSG_INFO_BAUDRATE                   _UxGT("Baud")
 #define MSG_INFO_PROTOCOL                   _UxGT("Protocollo")
+#define MSG_INFO_RUNAWAY_OFF                _UxGT("Controllo fuga: OFF")
+#define MSG_INFO_RUNAWAY_ON                 _UxGT("Controllo fuga: ON")
 #define MSG_CASE_LIGHT                      _UxGT("Luci Case")
 #define MSG_CASE_LIGHT_BRIGHTNESS           _UxGT("Luminosità Luci")
 #if LCD_WIDTH >= 20
@@ -440,6 +442,7 @@
 #define MSG_DAC_PERCENT                     _UxGT("Driver %")
 #define MSG_ERROR_TMC                       _UxGT("ERR.CONNESSIONE TMC")
 #define MSG_DAC_EEPROM_WRITE                _UxGT("Scrivi DAC EEPROM")
+#define MSG_FILAMENT_CHANGE_HEADER          _UxGT("CAMBIO FILAMENTO")
 #define MSG_FILAMENT_CHANGE_HEADER_PAUSE    _UxGT("STAMPA IN PAUSA")
 #define MSG_FILAMENT_CHANGE_HEADER_LOAD     _UxGT("CARICA FILAMENTO")
 #define MSG_FILAMENT_CHANGE_HEADER_UNLOAD   _UxGT("RIMUOVI FILAMENTO")

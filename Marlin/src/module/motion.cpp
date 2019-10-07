@@ -344,8 +344,8 @@ void _internal_move_to_destination(const feedRate_t &fr_mm_s/*=0.0f*/
 void do_blocking_move_to(const float rx, const float ry, const float rz, const feedRate_t &fr_mm_s/*=0.0*/) {
   if (DEBUGGING(LEVELING)) DEBUG_XYZ(">>> do_blocking_move_to", rx, ry, rz);
 
-  const feedRate_t z_feedrate = fr_mm_s ? fr_mm_s : homing_feedrate(Z_AXIS),
-                  xy_feedrate = fr_mm_s ? fr_mm_s : feedRate_t(XY_PROBE_FEEDRATE_MM_S);
+  const feedRate_t z_feedrate = fr_mm_s ?: homing_feedrate(Z_AXIS),
+                  xy_feedrate = fr_mm_s ?: feedRate_t(XY_PROBE_FEEDRATE_MM_S);
 
   #if ENABLED(DELTA)
 
@@ -430,6 +430,17 @@ void do_blocking_move_to(const float rx, const float ry, const float rz, const f
 
   planner.synchronize();
 }
+
+void do_blocking_move_to(const xy_pos_t &raw, const feedRate_t &fr_mm_s/*=0.0f*/) {
+  do_blocking_move_to(raw.x, raw.y, current_position.z, fr_mm_s);
+}
+void do_blocking_move_to(const xyz_pos_t &raw, const feedRate_t &fr_mm_s/*=0.0f*/) {
+  do_blocking_move_to(raw.x, raw.y, raw.z, fr_mm_s);
+}
+void do_blocking_move_to(const xyze_pos_t &raw, const feedRate_t &fr_mm_s/*=0.0f*/) {
+  do_blocking_move_to(raw.x, raw.y, raw.z, fr_mm_s);
+}
+
 void do_blocking_move_to_x(const float &rx, const feedRate_t &fr_mm_s/*=0.0*/) {
   do_blocking_move_to(rx, current_position.y, current_position.z, fr_mm_s);
 }
@@ -437,10 +448,18 @@ void do_blocking_move_to_y(const float &ry, const feedRate_t &fr_mm_s/*=0.0*/) {
   do_blocking_move_to(current_position.x, ry, current_position.z, fr_mm_s);
 }
 void do_blocking_move_to_z(const float &rz, const feedRate_t &fr_mm_s/*=0.0*/) {
-  do_blocking_move_to(current_position.x, current_position.y, rz, fr_mm_s);
+  do_blocking_move_to_xy_z(current_position, rz, fr_mm_s);
 }
+
 void do_blocking_move_to_xy(const float &rx, const float &ry, const feedRate_t &fr_mm_s/*=0.0*/) {
   do_blocking_move_to(rx, ry, current_position.z, fr_mm_s);
+}
+void do_blocking_move_to_xy(const xy_pos_t &raw, const feedRate_t &fr_mm_s/*=0.0f*/) {
+  do_blocking_move_to_xy(raw.x, raw.y, fr_mm_s);
+}
+
+void do_blocking_move_to_xy_z(const xy_pos_t &raw, const float &z, const feedRate_t &fr_mm_s/*=0.0f*/) {
+  do_blocking_move_to(raw.x, raw.y, z, fr_mm_s);
 }
 
 //
@@ -1255,7 +1274,7 @@ void do_homing_move(const AxisEnum axis, const float distance, const feedRate_t 
     #endif
   }
 
-  const feedRate_t real_fr_mm_s = fr_mm_s ? fr_mm_s : homing_feedrate(axis);
+  const feedRate_t real_fr_mm_s = fr_mm_s ?: homing_feedrate(axis);
   #if IS_SCARA
     // Tell the planner the axis is at 0
     current_position[axis] = 0;
