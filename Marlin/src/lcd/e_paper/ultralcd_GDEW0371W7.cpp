@@ -84,7 +84,7 @@ void MarlinUI::draw_marlin_bootscreen(const bool line2/*=false*/) {
     #define MARLIN_BMP_Y (MARLIN_BMP_HEIGHT) + (MRLIN_BANNER_HEIGHT) + (FONT_HEIGHT)
 
     const char * credit[] = {
-      "» Scott Lahteine    [@thinkyhead] - USA", "» Roxanne Neufeld   [@Roxy-3D] - USA",
+      "» Scott Lahteine    [@thinkyhead] - USA",   "» Roxanne Neufeld   [@Roxy-3D] - USA",
       "» Bob Kuhn          [@Bob-the-Kuhn] - USA", "» Chris Pepper      [@p3p] - UK",
       "» João Brazio       [@jbrazio] - Portugal", "» Erik van der Zalm [@ErikZalm] - Netherlands" };
 
@@ -157,8 +157,8 @@ void MarlinUI::draw_kill_screen() {
   epaper.firstPage();
   do {
     lcd_put_u8str(0, h4 * 1, status_message);
-    lcd_put_u8str(0, h4 * 2, MSG_HALTED);
-    lcd_put_u8str(0, h4 * 3, MSG_PLEASE_RESET);
+    lcd_put_u8str(0, h4 * 2, GET_TEXT(MSG_HALTED));
+    lcd_put_u8str(0, h4 * 3, GET_TEXT(MSG_PLEASE_RESET));
   } while (epaper.nextPage());
 }
 
